@@ -15,5 +15,5 @@ RUN apt-get -t wheezy-backports install -y \
 EXPOSE 80
 EXPOSE 443
 
-CMD ["nginx","-c","/home/http/default/main.conf","-g", "daemon off;"]
+CMD nginx -c $CONFIG -g "daemon off;"
 
