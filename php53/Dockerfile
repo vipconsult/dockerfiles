@@ -46,13 +46,12 @@ RUN update-exim4.conf && \
     
     sed -i -e "s/;daemonize = yes/daemonize = no/g" /etc/php5/fpm/php-fpm.conf
 
-#rm -rf /var/lib/apt/lists/* && \
-#apt-get clean && \
-
 # Setup supervisor
 RUN apt-get install -y supervisor
 ADD supervisord.conf /etc/supervisor/conf.d/ 
 RUN sed -i -e "s/var\/run\/\/supervisor.sock/var\/run\/\/supervisor_php53.sock/g" /etc/supervisor/supervisord.conf
+
+RUN apt-get purge -y --auto-remove && rm -rf /var/lib/apt/lists/* && apt-get clean
 
 CMD ["/usr/bin/supervisord"]
 

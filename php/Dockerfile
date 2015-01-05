@@ -37,12 +37,13 @@ RUN update-exim4.conf && \
 
     sed -i -e "s/;listen.owner = www-data/listen.owner = www-data/g" /etc/php5/fpm/pool.d/www.conf && \
     sed -i -e "s/;listen.group = www-data/listen.group = www-data/g" /etc/php5/fpm/pool.d/www.conf 
-
-
   
 # Setup supervisor
 RUN apt-get install -y supervisor && \
     sed -i -e "s/var\/run\/\/supervisor.sock/var\/run\/\/supervisor_php.sock/g" /etc/supervisor/supervisord.conf
+
 ADD supervisord.conf /etc/supervisor/conf.d/
+
+RUN apt-get purge -y --auto-remove && rm -rf /var/lib/apt/lists/* && apt-get clean
 
 CMD ["/usr/bin/supervisord"]

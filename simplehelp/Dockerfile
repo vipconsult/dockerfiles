@@ -10,6 +10,9 @@ RUN tar -zxvf SimpleHelp-linux-amd64.tar.gz  && \
 WORKDIR /home/SimpleHelp
 
 RUN sed -i -e "s/&/ /g" serverstart.sh
+
+RUN apt-get purge -y --auto-remove && rm -rf /var/lib/apt/lists/* && apt-get clean
+
 EXPOSE 80
 EXPOSE 443
 
