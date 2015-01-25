@@ -1,5 +1,5 @@
-[submodule "docker-library/postgres"]
-	path = docker-library/postgres
+[submodule "docker-library_postgres"]
+	path = docker-library_postgres
 	url = https://github.com/vipconsult/docker-library_postgres.git
 [submodule "SvenDowideit/dockerfiles"]
         path = SvenDowideit/dockerfiles
