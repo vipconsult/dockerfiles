@@ -9,7 +9,7 @@ docker run --restart=always -d  -v /var/run:/var/run -v /home/http:/home/http  -
 
 docker run --restart=always -d  -v /var/run:/var/run -v /home/http:/home/http  --link mysql1:mysql1  --link pgsql1:pgsql1 vipconsult/php
 
-docker run --restart=always -d -v /home/simplehelp/configuration:/home/SimpleHelp/configuration  --name simplehelp vipconsult/simplehelp
+docker run --restart=always -d -v /home/simplehelp:/home/simplehelp  --name simplehelp vipconsult/simplehelp
 
 docker run --restart=always -d -v /home/http:/home/http --name nginx -v /var/run:/var/run -p 80:80 -p 443:443 --link simplehelp:simplehelp vipconsult/nginx nginx -c /home/http/default/main.conf -g "daemon off;"
 
