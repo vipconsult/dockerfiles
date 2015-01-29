@@ -11,9 +11,9 @@ RUN apt-get install openssl \
     -out /etc/proftpd/proftpd.pem
 
 ADD proftpd.conf /etc/proftpd/
+
 #RUN apt-get install -y --no-install-recommends nano
-#RUN apt-get clean \
-#    && rm -rf /var/lib/apt/lists/*
-#EXPOSE 20 21 12020 12021 12022 12023 12024 12025
+RUN apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
 
 CMD proftpd -n
