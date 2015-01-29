@@ -12,3 +12,8 @@ docker run --restart=always -d  -v /var/run:/var/run -v /home/http:/home/http  -
 docker run --restart=always -d -v /home/simplehelp/configuration:/home/SimpleHelp/configuration  --name simplehelp vipconsult/simplehelp
 
 docker run --restart=always -d -v /home/http:/home/http --name nginx -v /var/run:/var/run -p 80:80 -p 443:443 --link simplehelp:simplehelp vipconsult/nginx nginx -c /home/http/default/main.conf -g "daemon off;"
+
+touch /home/proftpd/ftpd.passwd
+
+docker run --restart=always --net=host -d --name proftpd -v /home/http:/home/ -v /home/proftpd/ftpd.passwd:/etc/proftpd/ftpd.passwd vipconsult/proftpd
+#docker run -it --rm -v /home/fs/conf:/etc/freeswitch fs /bin/bash
