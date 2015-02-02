@@ -19,6 +19,7 @@ RUN apt-get install -y \
         php5 \
         php5-fpm \
         php5-gd \
+        php5-imagick \
         php5-mysql \
         php5-mcrypt \
         php5-memcache \
