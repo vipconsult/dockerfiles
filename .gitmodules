@@ -4,6 +4,3 @@
 [submodule "SvenDowideit/dockerfiles"]
         path = SvenDowideit/dockerfiles
         url = https://github.com/vipconsult/SvenDowideit_dockerfiles.git
-[submodule "webitel_freeswitch"]
-        path = webitel_freeswitch
-        url = https://github.com/vipconsult/webitel_freeswitch.git
