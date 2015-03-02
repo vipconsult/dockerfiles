@@ -13,11 +13,8 @@ WORKDIR /home/simplehelp
 # otherwise te start script exits at the end causing the contained to exit as well.
 #RUN sed -i -e "s/&/ /g" serverstart.sh
 
-RUN apt-get install libc6-i386
+RUN apt-get install -y libc6-i386
 RUN apt-get purge -y --auto-remove && rm -rf /var/lib/apt/lists/* && apt-get clean
-
-EXPOSE 80
-EXPOSE 443
 
 CMD ["sh","serverstart.sh"]
 
