@@ -1,7 +1,7 @@
 #! /bin/bash
 
 # your MySQL server's name
-SERVER=${backup_host:=`hostname`}
+SERVER=${backup_container:=`hostname`}
 
 # directory to backup to. It is now set to  same directory where the script file is.
 BACKDIR=${backup_dir:="/home/mysql_backup"}
@@ -31,7 +31,7 @@ DAYS=60
 
 #----------------------End of Settings------------------#
 
-        echo -e "<<<<< Backing up MYSQL dbs on server: $SERVER >>>>>>>\n\n "
+        echo -e "<<<<< Backing up MYSQL server $SERVER on host $HOST >>>>>>>\n\n "
 
          echo "Making backup directory in $BACKDIR"
 
