@@ -1,6 +1,6 @@
 #! /bin/bash
 
-# your MySQL server's name
+# your MySQL server's ip or domain name
 SERVER=${backup_container:=`hostname`}
 
 # directory to backup to. It is now set to  same directory where the script file is.
@@ -11,10 +11,6 @@ DATE=`date +'%d-%m-%Y'`
 DATE_old=$(date --date="yesterday" +"%d-%m-%Y")
 
 #----------------------MySQL Settings--------------------#
-
-# your MySQL server's location (IP address is best)
-HOST=${backup_server:="localhost"}
-
 
 # set to 'y' if you want to backup all your databases. this will override
 # the database selection above.
@@ -42,7 +38,7 @@ DAYS=60
 
 if  [ $DUMPALL = "y" ]; then
         # test connection to the server
-        mysql -h $HOST -Bse "show databases;"
+        mysql -h $SERVER -Bse "show databases;"
         if [[ $? -ne 0 ]]; then
             echo -e "\n\n\n ERROR: $SERVER MYSQL backup failed! :::  Cannot Connect to the mysql server  \n" 1>&2;
             exit;
@@ -51,7 +47,7 @@ if  [ $DUMPALL = "y" ]; then
         fi
 
         echo -n "Creating list of all your databases..."
-        DBS="$(mysql -h $HOST -Bse 'show databases;')"
+        DBS="$(mysql -h $SERVER -Bse 'show databases;')"
 fi
 
 echo $DBS;
@@ -61,7 +57,7 @@ if [[ ($database != "information_schema") && ($database != "performance_schema")
     echo "Backing up database $database..."
     mkdir -p $BACKDIR/$database
 
-    mysqldump -h $HOST --events $database > $BACKDIR/$database/$database-$DATE.sql
+    mysqldump -h $SERVER --events $database > $BACKDIR/$database/$database-$DATE.sql
     gzip -f -9 $BACKDIR/$database/$database-$DATE.sql
 
     new_file=`stat -c %s $BACKDIR/$database/$database-$DATE.sql.gz`
