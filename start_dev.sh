@@ -9,7 +9,7 @@ docker run --restart=always -d  -v /var/run:/var/run -v /home/http:/home/http  -
 
 docker run --restart=always -d  -v /var/run:/var/run -v /home/http:/home/http  --link mysql1:mysql1  --link pgsql1:pgsql1 vipconsult/php
 
-docker run --restart=always -d -v /home/http:/home/http --name nginx -v /var/run:/var/run -p 80:80 -p 443:443  vipconsult/nginx nginx -c /home/http/default/main.conf -g "daemon off;"
+docker run --restart=always -d -v /home/http:/home/http --name nginx -v /var/run:/var/run -p 80:80 -p 443:443  vipconsult/nginx-pagespeed nginx -c /home/http/default/main.conf -g "daemon off;"
 
 docker run -v /home:/home --name data library/debian:wheezy /bin/bash
 sleep 10

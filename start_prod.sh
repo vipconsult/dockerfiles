@@ -11,7 +11,7 @@ docker run --name php --restart=always -d -v /var/run:/var/run -v /home/http:/ho
 
 docker run --name simplehelp --restart=always -d -v /home/simplehelp:/home/simplehelp  --net=host vipconsult/simplehelp
 
-docker run --name nginx --restart=always -d -v /home/http:/home/http -v /var/run:/var/run -p 178.79.150.62:80:80 -p 178.79.150.62:443:443 vipconsult/nginx nginx -c /home/http/default/main.conf -g "daemon off;"
+docker run --name nginx --restart=always -d -v /home/http:/home/http -v /var/run:/var/run -p 178.79.150.62:80:80 -p 178.79.150.62:443:443 vipconsult/nginx-pagespeed nginx -c /home/http/default/main.conf -g "daemon off;"
 
 docker run --name cron --restart=always -d --link mysql1:mysql1 -v /home/http:/home/http  -v /home/cron/cron.daily:/etc/cron.daily vipconsult/cron
 
