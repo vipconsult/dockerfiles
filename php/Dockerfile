@@ -20,8 +20,9 @@ RUN apt-get install -y \
 
 ADD update-exim4.conf.conf /etc/exim4/update-exim4.conf.conf
 
-
-RUN update-exim4.conf && \
+# the mailname needs to be set as otherwise all server reject mails form non FQDN
+RUN echo vip-consult.co.uk > /etc/mailname && \
+    update-exim4.conf && \
     sed -i -e "s/short_open_tag = Off/short_open_tag = On/g" /etc/php5/fpm/php.ini  && \
     sed -i -e "s/post_max_size = 8M/post_max_size = 50M/g" /etc/php5/fpm/php.ini   && \
     sed -i -e "s/upload_max_filesize = 2M/upload_max_filesize = 500M/g" /etc/php5/fpm/php.ini   && \
