@@ -78,7 +78,7 @@ filesize_difference=${filesize_difference#-}
 if [[ "$filesize_difference" -lt "100"  ]]; then
                 echo -e "$database filesize check OK - today:$new_file kb yesterday:$old_file kb";
         else
-                echo -e "server :: $SERVER >> db:: $database -- FILE CHECK WARNING - yesterday->today \n ${old_file} -> ${new_file} kb \n" 1>&2
+                echo -e "server :: $SERVER >> db:: $database -- FILE CHECK WARNING - \n yesterday->today \n ${old_file} -> ${new_file} kb \n" 1>&2
         fi
 
 

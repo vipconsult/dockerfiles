@@ -32,6 +32,7 @@ ADD update-exim4.conf.conf /etc/exim4/
 # the mailname needs to be set as otherwise all server reject mails form non FQDN 
 RUN echo vip-consult.co.uk > /etc/mailname && \
     update-exim4.conf && \
+    sed -i -e "s/domainlist local_domains = MAIN_LOCAL_DOMAINS/domainlist local_domains =/g" /etc/exim4/exim4.conf.template  && \
     sed -i -e "s/short_open_tag = Off/short_open_tag = On/g" /etc/php5/fpm/php.ini  && \
     sed -i -e "s/post_max_size = 8M/post_max_size = 50M/g" /etc/php5/fpm/php.ini   && \
     sed -i -e "s/upload_max_filesize = 2M/upload_max_filesize = 500M/g" /etc/php5/fpm/php.ini   && \
