@@ -36,9 +36,14 @@ docker run --restart=always -d --name nginx-pagespeed  \
 	-p 443:443  \
 	vipconsult/nginx-pagespeed nginx -c /home/http/default/main.conf -g "daemon off;"
 
+docker run --restart=always -d --name logrotate \
+        -v /var/lib/docker:/var/lib/docker \
+        vipconsult/logrotate
+
+
 docker run -v /home:/home --name data \
 	library/debian:wheezy /bin/bash
-sleep 7
+sleep 6
 
 docker run \
 	-v $(which docker):/docker \
