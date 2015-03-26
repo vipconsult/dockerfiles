@@ -4,3 +4,7 @@
 [submodule "SvenDowideit/dockerfiles"]
         path = SvenDowideit/dockerfiles
         url = https://github.com/vipconsult/SvenDowideit_dockerfiles.git
+
+[submodule "michaloo_logrotate"]
+        path = michaloo_logrotate
+        url = https://github.com/vipconsult/michaloo_logrotate.git
