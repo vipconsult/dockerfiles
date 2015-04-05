@@ -32,11 +32,8 @@ RUN make && make install \
     && chmod -R u=rwx,g=rx /usr/local/freeswitch/bin/* \
     && ln /usr/local/freeswitch/bin/fs_cli /usr/local/bin/fs_cli
 
-
 # Clean up system
-
-
 RUN rm -R /usr/src/freeswitch/ \
     && apt-get clean && rm -rf /tmp/* /var/tmp/* && rm -rf /var/lib/apt/lists/*
 
-CMD /usr/local/freeswitch/bin/freeswitch
+ENTRYPOINT /usr/local/freeswitch/bin/freeswitch
