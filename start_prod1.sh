@@ -91,7 +91,7 @@ echo "Starting $cn"
 
 	docker run --name $cn --restart=always -d \
 		--net=host \
-		-v /home/http:/home/ \
+		-v /home/:/home/ \
 		-v /home/proftpd/ftpd.passwd:/etc/proftpd/ftpd.passwd \
 		vipconsult/proftpd
 fi
@@ -102,4 +102,15 @@ echo "Starting $cn"
 	docker run --name $cn --restart=always -d \
 		-v /var/lib/docker:/var/lib/docker \
 		vipconsult/logrotate
+fi
+
+cn="fs"
+if [ "$1" == "" ] || [ $1 == $cn ] ;then
+echo "Starting $cn"
+	sudo docker run --name $cn \
+        	--restart=always -d \
+	        -v /home/freeswitch/sounds:/usr/local/freeswitch/sounds \
+        	-v /home/freeswitch/conf:/usr/local/freeswitch/conf \
+	        --net=host \
+	        vipconsult/freeswitch
 fi
