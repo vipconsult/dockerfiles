@@ -87,6 +87,6 @@ echo "Starting $cn"
 		-v /var/run/docker.sock:/docker.sock \
 		-e USER=vipconsult \
 		-e GROUP=www-data \
-		-e USERID=1002 \
+		-e USERID=1001 \
 		vipconsult/samba data
 fi
