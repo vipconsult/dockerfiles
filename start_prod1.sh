@@ -28,6 +28,14 @@ echo "Starting $cn"
 		vipconsult/pgsql93
 fi
 
+cn="smtp"
+if [ "$1" == "" ] || [ $1 == $cn ] ;then
+echo "Starting $cn"
+	docker run --restart=always -d --name $cn \
+		-h vip-consult.co.uk \
+		vipconsult/smtp
+fi
+
 cn="php53"
 if [ "$1" == "" ] || [ $1 == $cn ] ;then
 echo "Starting $cn"
@@ -36,6 +44,7 @@ echo "Starting $cn"
 		-v /home/http:/home/http  \
 		--link mysql1:mysql1  \
 		--link psql1:psql1  \
+                --link smtp:smtp \
 		-h vip-consult.co.uk \
 		vipconsult/php53
 fi
@@ -48,6 +57,7 @@ echo "Starting $cn"
 		-v /home/http:/home/http  \
 		--link mysql1:mysql1  \
 		--link psql1:psql1 \
+                --link smtp:smtp \
 		-h vip-consult.co.uk \
 		vipconsult/php
 fi

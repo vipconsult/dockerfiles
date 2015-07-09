@@ -14,7 +14,7 @@ echo "Starting $cn"
 	docker run --restart=always -d --name $cn \
 		-p 127.0.0.1:3306:3306 \
 		-v /home/mysql:/var/lib/mysql \
-		-e MYSQL_ROOT_PASSWORD=aaaa \
+		-e MYSQL_ROOT_PASSWORD=root \
 		vipconsult/mysql
 fi
 
@@ -28,6 +28,14 @@ echo "Starting $cn"
 		vipconsult/pgsql93
 fi
 
+cn="smtp"
+if [ "$1" == "" ] || [ $1 == $cn ] ;then
+echo "Starting $cn"
+	docker run --restart=always -d --name $cn \
+		-h dev.vip-consult.co.uk \
+		vipconsult/smtp
+fi
+
 cn="php53"
 if [ "$1" == "" ] || [ $1 == $cn ] ;then
 echo "Starting $cn"
@@ -36,6 +44,8 @@ echo "Starting $cn"
 		-v /home/http:/home/http  \
 		--link mysql1:mysql1  \
 		--link psql1:psql1 \
+                --link smtp:smtp \
+                -e "smtpServer=smtp" \
 		-h dev.vip-consult.co.uk \
 		vipconsult/php53
 fi
@@ -46,8 +56,11 @@ echo "Starting $cn"
 	docker run --restart=always -d  --name $cn \
 		-v /var/run:/var/run \
 		-v /home/http:/home/http  \
+                --link psql1:psql1 \
 		--link mysql1:mysql1  \
-		--link psql1:psql1 \
+		--link smtp:smtp \
+                -e "smtpServer=smtp" \
+                -v /var/run/docker.sock:/run/docker.sock -v $(which docker):/bin/docker \
         	-h dev.vip-consult.co.uk \
 		vipconsult/php
 fi
