@@ -1,9 +1,17 @@
 FROM debian:wheezy
 MAINTAINER Krasimir Georgiev <support@vip-consult.co.uk>
 
-RUN apt-get update
-    
-RUN apt-get install -y \
+RUN apt-get update && apt-get install -y \
+	wget
+
+
+RUN echo "deb http://packages.dotdeb.org wheezy-php55 all" >> /etc/apt/sources.list && \
+	echo "deb-src http://packages.dotdeb.org wheezy-php55 all">> /etc/apt/sources.list
+RUN wget http://www.dotdeb.org/dotdeb.gpg&& apt-key add dotdeb.gpg&& rm dotdeb.gpg
+
+RUN 	apt-get update
+
+RUN 	apt-get install -y \
         php5 \
         php5-fpm \
         php5-gd \
@@ -16,7 +24,6 @@ RUN apt-get install -y \
         php5-memcache \
         memcached \
         ssmtp
-
 
 RUN sed -i "s/^.*FromLineOverride.*$/FromLineOverride=YES/" /etc/ssmtp/ssmtp.conf && \
     sed -i 's/^.*post_max_size.*$/post_max_size = 500M/' /etc/php5/fpm/php.ini && \

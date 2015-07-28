@@ -33,6 +33,7 @@ if [ "$1" == "" ] || [ $1 == $cn ] ;then
 echo "Starting $cn"
 	docker run --restart=always -d --name $cn \
 		-h dev.vip-consult.co.uk \
+		-p 127.0.0.1:25:25 \
 		vipconsult/smtp
 fi
 
@@ -60,7 +61,6 @@ echo "Starting $cn"
 		--link mysql1:mysql1  \
 		--link smtp:smtp \
                 -e "smtpServer=smtp" \
-                -v /var/run/docker.sock:/run/docker.sock -v $(which docker):/bin/docker \
         	-h dev.vip-consult.co.uk \
 		vipconsult/php
 fi
@@ -76,13 +76,26 @@ echo "Starting $cn"
 		vipconsult/nginx-pagespeed nginx -c /home/http/default/main.conf -g "daemon off;"
 fi
 
-cn="logrotate"
+cn="fs"
 if [ "$1" == "" ] || [ $1 == $cn ] ;then
 echo "Starting $cn"
-	docker run --restart=always -d --name $cn \
-        	-v /var/lib/docker:/var/lib/docker \
-        	vipconsult/logrotate
+        sudo docker run --name $cn \
+                --restart=always -d \
+                -v /home/telecom/fs/sounds:/usr/local/freeswitch/sounds \
+                -v /home/telecom/fs/ssl:/usr/local/freeswitch/ssl \
+                -v /home/telecom/fs/conf:/usr/local/freeswitch/conf \
+                --net=host \
+                vipconsult/freeswitch
 fi
+
+
+#cn="logrotate"
+#if [ "$1" == "" ] || [ $1 == $cn ] ;then
+#echo "Starting $cn"
+#	docker run --restart=always -d --name $cn \
+#        	-v /var/lib/docker:/var/lib/docker \
+#        	vipconsult/logrotate
+#fi
 
 cn="data"
 if [ "$1" == "" ] || [ $1 == $cn ] ;then

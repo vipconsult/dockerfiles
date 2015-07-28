@@ -121,6 +121,7 @@ echo "Starting $cn"
         	--restart=always -d \
 	        -v /home/freeswitch/sounds:/usr/local/freeswitch/sounds \
         	-v /home/freeswitch/conf:/usr/local/freeswitch/conf \
+                -v /home/freeswitch/ssl:/usr/local/freeswitch/ssl \
 	        --net=host \
 	        vipconsult/freeswitch
 fi
