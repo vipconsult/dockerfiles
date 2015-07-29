@@ -1,8 +1,7 @@
 FROM debian:wheezy
 MAINTAINER Krasimir Georgiev <support@vip-consult.co.uk>
 
-RUN apt-get update && apt-get install -y \
-	wget
+RUN apt-get update && apt-get install -y --no-install-recommends wget
 
 
 RUN echo "deb http://packages.dotdeb.org wheezy-php55 all" >> /etc/apt/sources.list && \
@@ -11,7 +10,7 @@ RUN wget http://www.dotdeb.org/dotdeb.gpg&& apt-key add dotdeb.gpg&& rm dotdeb.g
 
 RUN 	apt-get update
 
-RUN 	apt-get install -y \
+RUN 	apt-get install -y --no-install-recommends \
         php5 \
         php5-fpm \
         php5-gd \
@@ -33,7 +32,7 @@ RUN sed -i "s/^.*FromLineOverride.*$/FromLineOverride=YES/" /etc/ssmtp/ssmtp.con
     sed -i 's/^.*max_input_vars.*$/max_input_vars = 5000/' /etc/php5/fpm/php.ini && \
     sed -i 's/^.*error_reporting = .*$/error_reporting = E_ALL \& ~E_DEPRECATED/' /etc/php5/fpm/php.ini && \
     sed -i 's/^.*default_socket_timeout.*$/default_socket_timeout = 120/' /etc/php5/fpm/php.ini && \
-    sed -i 's/^.*date.timezone.*$/date.timezone = Europe\/London/' /etc/php5/fpm/php.ini && \
+    sed -i '0,s/^.*date.timezone.*$/date.timezone = Europe\/London/' /etc/php5/fpm/php.ini && \
     
     sed -i 's/^.*daemonize.*$/daemonize = no/' /etc/php5/fpm/php-fpm.conf && \
 
