@@ -15,7 +15,6 @@ RUN echo 'deb http://packages.dotdeb.org squeeze all' >> /etc/apt/sources.list &
 
 
 RUN apt-get install -y \
-        exim4 \
         php5 \
         php5-fpm \
         php5-gd \
@@ -25,14 +24,11 @@ RUN apt-get install -y \
         php5-memcache \
         php5-curl \
         php5-memcache \
-        memcached 
+        memcached \
+        ssmtp
 
-ADD update-exim4.conf.conf /etc/exim4/
 
-# the mailname needs to be set as otherwise all server reject mails form non FQDN 
-RUN echo vip-consult.co.uk > /etc/mailname && \
-    sed -i -e "s/domainlist local_domains = MAIN_LOCAL_DOMAINS/domainlist local_domains =/g" /etc/exim4/exim4.conf.template  && \
-    update-exim4.conf && \
+RUN sed -i "s/^.*FromLineOverride.*$/FromLineOverride=YES/" /etc/ssmtp/ssmtp.conf && \
     sed -i -e "s/short_open_tag = Off/short_open_tag = On/g" /etc/php5/fpm/php.ini  && \
     sed -i -e "s/post_max_size = 8M/post_max_size = 50M/g" /etc/php5/fpm/php.ini   && \
     sed -i -e "s/upload_max_filesize = 2M/upload_max_filesize = 500M/g" /etc/php5/fpm/php.ini   && \

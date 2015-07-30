@@ -1,10 +1,16 @@
 FROM debian:wheezy
 MAINTAINER Krasimir Georgiev <support@vip-consult.co.uk>
 
-RUN apt-get update
-    
-RUN apt-get install -y \
-        exim4 \
+RUN apt-get update && apt-get install -y --no-install-recommends wget
+
+
+RUN echo "deb http://packages.dotdeb.org wheezy-php55 all" >> /etc/apt/sources.list && \
+	echo "deb-src http://packages.dotdeb.org wheezy-php55 all">> /etc/apt/sources.list
+RUN wget http://www.dotdeb.org/dotdeb.gpg&& apt-key add dotdeb.gpg&& rm dotdeb.gpg
+
+RUN 	apt-get update
+
+RUN 	apt-get install -y --no-install-recommends \
         php5 \
         php5-fpm \
         php5-gd \
@@ -15,32 +21,25 @@ RUN apt-get install -y \
         php5-memcache \
         php5-curl \
         php5-memcache \
-        memcached 
+        memcached \
+        ssmtp
 
-
-ADD update-exim4.conf.conf /etc/exim4/update-exim4.conf.conf
-
-# the mailname needs to be set as otherwise all server reject mails form non FQDN
-RUN echo vip-consult.co.uk > /etc/mailname && \
-    sed -i -e "s/domainlist local_domains = MAIN_LOCAL_DOMAINS/domainlist local_domains =/g" /etc/exim4/exim4.conf.template  && \
-    update-exim4.conf && \
-    sed -i -e "s/short_open_tag = Off/short_open_tag = On/g" /etc/php5/fpm/php.ini  && \
-    sed -i -e "s/post_max_size = 8M/post_max_size = 50M/g" /etc/php5/fpm/php.ini   && \
-    sed -i -e "s/upload_max_filesize = 2M/upload_max_filesize = 500M/g" /etc/php5/fpm/php.ini   && \
-    sed -i -e "s/max_execution_time = 30/max_execution_time = 60/g" /etc/php5/fpm/php.ini   && \
-    sed -i -e "s/max_input_vars = 1000/max_input_vars = 5000/g" /etc/php5/fpm/php.ini   && \
-    sed -i -e "s/error_reporting = E_ALL \& ~E_DEPRECATED \& ~E_STRICT/error_reporting = E_ALL \& ~E_DEPRECATED/g" /etc/php5/fpm/php.ini   && \
-    sed -i -e "s/default_socket_timeout = 60/default_socket_timeout = 120/g" /etc/php5/fpm/php.ini   && \
-    sed -i -e "s/;date.timezone =/date.timezone = Europe\/London/g" /etc/php5/fpm/php.ini && \
+RUN sed -i "s/^.*FromLineOverride.*$/FromLineOverride=YES/" /etc/ssmtp/ssmtp.conf && \
+    sed -i 's/^.*post_max_size.*$/post_max_size = 500M/' /etc/php5/fpm/php.ini && \
+    sed -i 's/^.*upload_max_filesize =.*$/upload_max_filesize = 500M/' /etc/php5/fpm/php.ini && \
+    sed -i 's/^.*short_open_tag =.*$/short_open_tag = On/' /etc/php5/fpm/php.ini && \
+    sed -i 's/^.*max_execution_time.*$/max_execution_time = 60/' /etc/php5/fpm/php.ini && \
+    sed -i 's/^.*max_input_vars.*$/max_input_vars = 5000/' /etc/php5/fpm/php.ini && \
+    sed -i 's/^.*error_reporting = .*$/error_reporting = E_ALL \& ~E_DEPRECATED/' /etc/php5/fpm/php.ini && \
+    sed -i 's/^.*default_socket_timeout.*$/default_socket_timeout = 120/' /etc/php5/fpm/php.ini && \
+    sed -i 's/^.*date.timezone.*$/date.timezone = Europe\/London/' /etc/php5/fpm/php.ini && \
     
+    sed -i 's/^.*daemonize.*$/daemonize = no/' /etc/php5/fpm/php-fpm.conf && \
 
-    sed -i -e "s/;daemonize = yes/daemonize = no/g" /etc/php5/fpm/php-fpm.conf && \
+    sed -i 's/^.*listen =.*$/listen = \/var\/run\/php5-fpm.sock/' /etc/php5/fpm/pool.d/www.conf && \
+    sed -i 's/^.*listen.owner =.*$/listen.owner = www-data/' /etc/php5/fpm/pool.d/www.conf && \
+    sed -i 's/^.*listen.group =.*$/listen.group = www-data/' /etc/php5/fpm/pool.d/www.conf
 
-    sed -i -e "s/listen = 127.0.0.1:9000/listen = \/var\/run\/php5-fpm.sock/g" /etc/php5/fpm/pool.d/www.conf && \
-
-    sed -i -e "s/;listen.owner = www-data/listen.owner = www-data/g" /etc/php5/fpm/pool.d/www.conf && \
-    sed -i -e "s/;listen.group = www-data/listen.group = www-data/g" /etc/php5/fpm/pool.d/www.conf 
-  
 # Setup supervisor
 RUN apt-get install -y supervisor && \
     sed -i -e "s/var\/run\/\/supervisor.sock/var\/run\/\/supervisor_php.sock/g" /etc/supervisor/supervisord.conf
