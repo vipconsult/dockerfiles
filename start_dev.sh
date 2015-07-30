@@ -13,6 +13,8 @@ if [ "$1" == "" ] || [ $1 == $cn ] ;then
 echo "Starting $cn"
 	docker run --restart=always -d --name $cn \
 		-p 127.0.0.1:3306:3306 \
+                -v /etc/localtime:/etc/localtime:ro \
+                -v /etc/timezone:/etc/timezone:ro \
 		-v /home/mysql:/var/lib/mysql \
 		-e MYSQL_ROOT_PASSWORD=root \
 		vipconsult/mysql
@@ -23,6 +25,8 @@ if [ "$1" == "" ] || [ $1 == $cn ] ;then
 echo "Starting $cn"
 	docker run --restart=always -d --name $cn \
 		-p 127.0.0.1:5432:5432 \
+                -v /etc/localtime:/etc/localtime:ro \
+                -v /etc/timezone:/etc/timezone:ro \
 		-v /home/postgresql:/var/lib/postgresql/data \
 		-e PG_LOCALE="en_GB.UTF-8 UTF-8" \
 		vipconsult/pgsql93
@@ -34,6 +38,8 @@ echo "Starting $cn"
 	docker run --restart=always -d --name $cn \
 		-h dev.vip-consult.co.uk \
 		-p 127.0.0.1:25:25 \
+                -v /etc/localtime:/etc/localtime:ro \
+                -v /etc/timezone:/etc/timezone:ro \
 		vipconsult/smtp
 fi
 
@@ -43,6 +49,8 @@ echo "Starting $cn"
 	docker run --restart=always -d --name $cn \
 		-v /var/run:/var/run \
 		-v /home/http:/home/http  \
+                -v /etc/localtime:/etc/localtime:ro \
+                -v /etc/timezone:/etc/timezone:ro \
 		--link mysql1:mysql1  \
 		--link psql1:psql1 \
                 --link smtp:smtp \
@@ -57,6 +65,8 @@ echo "Starting $cn"
 	docker run --restart=always -d  --name $cn \
 		-v /var/run:/var/run \
 		-v /home/http:/home/http  \
+                -v /etc/localtime:/etc/localtime:ro \
+                -v /etc/timezone:/etc/timezone:ro \
                 --link psql1:psql1 \
 		--link mysql1:mysql1  \
 		--link smtp:smtp \
@@ -71,6 +81,8 @@ echo "Starting $cn"
 	docker run --restart=always -d --name $cn  \
 		-v /home/http:/home/http \
 		-v /var/run:/var/run \
+                -v /etc/localtime:/etc/localtime:ro \
+                -v /etc/timezone:/etc/timezone:ro \
 		-p 80:80 \
 		-p 443:443  \
 		vipconsult/nginx-pagespeed nginx -c /home/http/default/main.conf -g "daemon off;"
@@ -81,9 +93,12 @@ if [ "$1" == "" ] || [ $1 == $cn ] ;then
 echo "Starting $cn"
         sudo docker run --name $cn \
                 --restart=always -d \
+                -v /etc/localtime:/etc/localtime:ro \
+                -v /etc/timezone:/etc/timezone:ro \
                 -v /home/telecom/fs/sounds:/usr/local/freeswitch/sounds \
                 -v /home/telecom/fs/ssl:/usr/local/freeswitch/ssl \
                 -v /home/telecom/fs/conf:/usr/local/freeswitch/conf \
+                -v /home/telecom/fs/conf/fs_cli.conf:/etc/fs_cli.conf \
                 --net=host \
                 vipconsult/freeswitch
 fi
@@ -94,6 +109,8 @@ fi
 #echo "Starting $cn"
 #	docker run --restart=always -d --name $cn \
 #        	-v /var/lib/docker:/var/lib/docker \
+#                -v /etc/localtime:/etc/localtime:ro \
+#                -v /etc/timezone:/etc/timezone:ro \
 #        	vipconsult/logrotate
 #fi
 
@@ -111,6 +128,8 @@ echo "Starting $cn"
 	docker run \
 		-v $(which docker):/docker \
 		-v /var/run/docker.sock:/docker.sock \
+                -v /etc/localtime:/etc/localtime:ro \
+                -v /etc/timezone:/etc/timezone:ro \
 		-e USER=vipconsult \
 		-e GROUP=www-data \
 		-e USERID=1001 \
