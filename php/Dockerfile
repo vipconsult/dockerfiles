@@ -11,10 +11,11 @@ RUN wget http://www.dotdeb.org/dotdeb.gpg&& apt-key add dotdeb.gpg&& rm dotdeb.g
 RUN 	apt-get update
 
 RUN 	apt-get install -y --no-install-recommends \
-        php5 \
+	php5 \
         php5-fpm \
         php5-gd \
         php5-imagick \
+	ghostscript \
         php5-mysql \
         php5-pgsql \
         php5-mcrypt \
