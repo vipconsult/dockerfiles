@@ -26,6 +26,10 @@ RUN 	apt-get install -y --no-install-recommends \
         ssmtp
 
 RUN sed -i "s/^.*FromLineOverride.*$/FromLineOverride=YES/" /etc/ssmtp/ssmtp.conf && \
+    # downlod cert chain as without this curl over https returns an error
+    wget http://curl.haxx.se/ca/cacert.pem --directory-prefix=/etc/php5/fpm && \
+    sed -i 's/^.*curl.cainfo.*$/curl.cainfo =\/etc\/php5\/fpm\/cacert.pem/' /etc/php5/fpm/php.ini && \
+    #set some additional php params
     sed -i 's/^.*post_max_size.*$/post_max_size = 500M/' /etc/php5/fpm/php.ini && \
     sed -i 's/^.*upload_max_filesize =.*$/upload_max_filesize = 500M/' /etc/php5/fpm/php.ini && \
     sed -i 's/^.*short_open_tag =.*$/short_open_tag = On/' /etc/php5/fpm/php.ini && \
