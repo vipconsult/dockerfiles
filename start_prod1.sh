@@ -146,6 +146,7 @@ echo "Starting $cn"
 	        -v /home/freeswitch/sounds:/usr/local/freeswitch/sounds \
         	-v /home/freeswitch/conf:/usr/local/freeswitch/conf \
 		-v /home/freeswitch/ssl:/usr/local/freeswitch/ssl \
+           -v /home/freeswitch/conf/fs_cli.conf:/etc/fs_cli.conf \
 		-v /etc/localtime:/etc/localtime:ro \
 		-v /etc/timezone:/etc/timezone:ro \
 	        --net=host \
