@@ -3,7 +3,7 @@
 # AUTHOR:         Krasimir Georgiev <support@vip-consult.co.uk>
 # DESCRIPTION:    Freeswitch Image Container 
 
-FROM debian
+FROM debian:wheezy
  
 RUN	apt-get update  \
         && apt-get install -y --no-install-recommends \
