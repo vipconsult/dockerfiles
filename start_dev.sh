@@ -91,14 +91,12 @@ fi
 cn="fs"
 if [ "$1" == "" ] || [ $1 == $cn ] ;then
 echo "Starting $cn"
-        sudo docker run --name $cn \
-                --restart=always -d \
+        sudo docker run --restart=always -d --name $cn \
                 -v /etc/localtime:/etc/localtime:ro \
                 -v /etc/timezone:/etc/timezone:ro \
-                -v /home/telecom/fs/sounds:/usr/local/freeswitch/sounds \
-                -v /home/telecom/fs/ssl:/usr/local/freeswitch/ssl \
-                -v /home/telecom/fs/conf:/usr/local/freeswitch/conf \
-                -v /home/telecom/fs/conf/fs_cli.conf:/etc/fs_cli.conf \
+                -v /home/telecom/fs_new_layout:/usr/local/freeswitch/conf \
+                -v /home/telecom/fs_new_layout/fs_cli.conf:/etc/fs_cli.conf \
+                -v /home/telecom/fs_new_layout/odbc.ini:/etc/odbc.ini \
                 --net=host \
                 vipconsult/freeswitch
 fi

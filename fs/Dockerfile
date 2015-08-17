@@ -4,14 +4,17 @@
 # DESCRIPTION:    Freeswitch Image Container 
 
 FROM debian:wheezy
- 
-RUN	apt-get update  \
-        && apt-get install -y --no-install-recommends \
+
+RUN apt-get update
+
+RUN apt-get install -y --no-install-recommends \
         make curl wget adduser autoconf automake devscripts gawk g++ git-core ca-certificates \
         libjpeg-dev libncurses5-dev libtool make python-dev gawk pkg-config \
         libtiff5-dev libperl-dev libgdbm-dev libdb-dev gettext libssl-dev \
-        libcurl4-openssl-dev libpcre3-dev libspeex-dev libspeexdsp-dev \
-        libsqlite3-dev libedit-dev libldns-dev libpq-dev
+        libcurl4-openssl-dev libpcre3-dev libspeex-dev libspeexdsp-dev libsqlite3-dev \
+        libedit-dev libldns-dev libpq-dev \
+# install odbc support 
+        unixodbc-dev odbc-postgresql 
 
 RUN cd /usr/src \
     && git clone -b v1.4 https://freeswitch.org/stash/scm/fs/freeswitch.git freeswitch
