@@ -13,4 +13,3 @@ preferable you should have a dedicated ip for freeswitch to avoid port collision
 
 The run example above loads the config and the sound files from the host by using a shared dirs.
 The sound files are quite big so if you put this in the image then it will make the container very big.
-
