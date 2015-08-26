@@ -84,7 +84,6 @@ echo "Starting $cn"
                 -v /etc/localtime:/etc/localtime:ro \
                 -v /etc/timezone:/etc/timezone:ro \
 		-p 80:80 \
-		-p 443:443  \
 		vipconsult/nginx-pagespeed nginx -c /home/http/default/main.conf -g "daemon off;"
 fi
 

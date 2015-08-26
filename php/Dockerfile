@@ -28,6 +28,9 @@ RUN 	apt-get install -y --no-install-recommends \
 RUN sed -i "s/^.*FromLineOverride.*$/FromLineOverride=YES/" /etc/ssmtp/ssmtp.conf && \
     # downlod cert chain as without this curl over https returns an error
     wget http://curl.haxx.se/ca/cacert.pem --directory-prefix=/etc/php5/fpm && \
+    wget http://www.symantec.com/content/en/us/enterprise/verisign/roots/Class-3-Public-Primary-Certification-Authority.pem --directory-prefix=/etc/php5/fpm/ && \
+    cat /etc/php5/fpm/Class-3-Public-Primary-Certification-Authority.pem >> /etc/php5/fpm/cacert.pem && \
+    rm /etc/php5/fpm/Class-3-Public-Primary-Certification-Authority.pem && \
     sed -i 's/^.*curl.cainfo.*$/curl.cainfo =\/etc\/php5\/fpm\/cacert.pem/' /etc/php5/fpm/php.ini && \
     #set some additional php params
     sed -i 's/^.*post_max_size.*$/post_max_size = 500M/' /etc/php5/fpm/php.ini && \
