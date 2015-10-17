@@ -96,11 +96,25 @@ echo "Starting $cn"
                 -v /home/telecom/fs_new_layout:/usr/local/freeswitch/conf \
                 -v /home/telecom/fs_new_layout/fs_cli.conf:/etc/fs_cli.conf \
                 -v /home/telecom/fs_new_layout/odbc.ini:/etc/odbc.ini \
+		-v /home/telecom/fs_new_layout/storage:/usr/local/freeswitch/storage \
                 --net=host \
                 vipconsult/freeswitch
 fi
 
-
+cn="backend"
+if [ "$1" == "" ] || [ $1 == $cn ] ;then
+echo "Starting $cn"
+	docker run -it --rm --name $cn \
+	--link psql1:psql1 \
+	-P \
+	-v $(which docker):/docker \
+	-e "smtpServer=smtp" \
+	-e "portalIP=192.168.168.168" \
+	--link smtp:smtp \
+	-v /var/run/docker.sock:/docker.sock \
+	-v /home/golang/src/github.com/vipconsult/portalBackend:/go/src/portalBackend  \
+	b
+fi
 #cn="logrotate"
 #if [ "$1" == "" ] || [ $1 == $cn ] ;then
 #echo "Starting $cn"
