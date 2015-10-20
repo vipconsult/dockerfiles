@@ -17,7 +17,8 @@ echo "Starting $cn"
                 -v /etc/timezone:/etc/timezone:ro \
 		-v /home/mysql:/var/lib/mysql \
 		-e MYSQL_ROOT_PASSWORD=root \
-		vipconsult/mysql
+		mysql:5.6
+		#vipconsult/mysql
 fi
 
 cn="psql1"
@@ -28,8 +29,9 @@ echo "Starting $cn"
                 -v /etc/localtime:/etc/localtime:ro \
                 -v /etc/timezone:/etc/timezone:ro \
 		-v /home/postgresql:/var/lib/postgresql/data \
-		-e PG_LOCALE="en_GB.UTF-8 UTF-8" \
-		vipconsult/pgsql93
+		postgres:9.3
+		#-e PG_LOCALE="en_GB.UTF-8 UTF-8" \
+		#vipconsult/pgsql93
 fi
 
 cn="smtp"
@@ -91,7 +93,8 @@ cn="fs"
 if [ "$1" == "" ] || [ $1 == $cn ] ;then
 echo "Starting $cn"
         sudo docker run --restart=always -d --name $cn \
-                -v /etc/localtime:/etc/localtime:ro \
+                --privileged \
+		-v /etc/localtime:/etc/localtime:ro \
                 -v /etc/timezone:/etc/timezone:ro \
                 -v /home/telecom/fs_new_layout:/usr/local/freeswitch/conf \
                 -v /home/telecom/fs_new_layout/fs_cli.conf:/etc/fs_cli.conf \
@@ -125,24 +128,41 @@ fi
 #        	vipconsult/logrotate
 #fi
 
-cn="data"
+#cn="data"
+#if [ "$1" == "" ] || [ $1 == $cn ] ;then
+#echo "Starting $cn"
+#	docker run -v /home:/home --name $cn \
+#		library/debian:wheezy /bin/bash
+#	sleep 6
+#fi
+
+cn="samba"
 if [ "$1" == "" ] || [ $1 == $cn ] ;then
 echo "Starting $cn"
-	docker run -v /home:/home --name $cn \
-		library/debian:wheezy /bin/bash
-	sleep 6
+        docker run \
+		--restart=always -d --name $cn \
+		-v /etc/localtime:/etc/localtime:ro \
+                -v /etc/timezone:/etc/timezone:ro \
+		-p 139:139 -p 445:445  \
+		-v /home:/home \
+		dreamcat4/samba \
+		-s "home;/home" \
+		-s "home;/home;yes;no;no;http" \
+		-u "http;1202;1001;www-data"
 fi
 
-cn="samba-server"
-if [ "$1" == "" ] || [ $1 == $cn ] ;then
-echo "Starting $cn"
-	docker run \
-		-v $(which docker):/docker \
-		-v /var/run/docker.sock:/docker.sock \
-                -v /etc/localtime:/etc/localtime:ro \
-                -v /etc/timezone:/etc/timezone:ro \
-		-e USER=vipconsult \
-		-e GROUP=www-data \
-		-e USERID=1001 \
-		vipconsult/samba data
-fi
+
+#cn="samba-server"
+#if [ "$1" == "" ] || [ $1 == $cn ] ;then
+#echo "Starting $cn"
+#	docker run \
+#		-v $(which docker):/docker \
+#		-v /var/run/docker.sock:/docker.sock \
+#               -v /etc/localtime:/etc/localtime:ro \
+#                -v /etc/timezone:/etc/timezone:ro \
+#		-e USER=vipconsult \
+#		-e GROUP=www-data \
+#		-e USERID=1001 \
+#		svendowideit/samba data
+#		#vipconsult/samba data
+#fi
