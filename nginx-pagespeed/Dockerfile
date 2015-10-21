@@ -12,9 +12,10 @@ ENV NPS_VERSION 1.9.32.3
 ENV OPENSSL_VERSION 1.0.2
 
 # Install Build Tools & Dependence
-RUN echo "deb-src http://http.debian.net/debian wheezy main\ndeb-src http://http.debian.net/debian wheezy-updates main\ndeb-src http://security.debian.org/ wheezy/updates main" >> /etc/apt/sources.list
+RUN printf "deb-src http://http.debian.net/debian wheezy main\ndeb-src http://http.debian.net/debian wheezy-updates main\ndeb-src http://security.debian.org/ wheezy/updates main" >> /etc/apt/sources.list
 
 RUN apt-get update && \
+    apt-get install autotools-dev && \
     apt-get build-dep nginx-full -y && \
     apt-get install -y build-essential zlib1g-dev libpcre3 libpcre3-dev && \
     apt-get install wget -y && \
@@ -33,22 +34,22 @@ RUN mkdir ${MODULE_DIR}
 
 # Download Source
 RUN cd /usr/src && \
-    wget -q http://nginx.org/download/nginx-${NGINX_VERSION}.tar.gz && \
+    wget http://nginx.org/download/nginx-${NGINX_VERSION}.tar.gz && \
     tar xzf nginx-${NGINX_VERSION}.tar.gz && \
     rm -rf nginx-${NGINX_VERSION}.tar.gz && \
 
     cd /usr/src && \
-    wget -q http://www.openssl.org/source/openssl-${OPENSSL_VERSION}.tar.gz && \
+    wget ftp://ftp.openssl.org/source/openssl-${OPENSSL_VERSION}.tar.gz && \
     tar xzf openssl-${OPENSSL_VERSION}.tar.gz && \
     rm -rf openssl-${OPENSSL_VERSION}.tar.gz && \
 
     # Install Addational Module
     cd ${MODULE_DIR} && \
-    wget -q --no-check-certificate https://github.com/pagespeed/ngx_pagespeed/archive/release-${NPS_VERSION}-beta.tar.gz && \
+    wget --no-check-certificate https://github.com/pagespeed/ngx_pagespeed/archive/release-${NPS_VERSION}-beta.tar.gz && \
     tar zxf release-${NPS_VERSION}-beta.tar.gz && \
     rm -rf release-${NPS_VERSION}-beta.tar.gz && \
     cd ngx_pagespeed-release-${NPS_VERSION}-beta/ && \
-    wget -q --no-check-certificate https://dl.google.com/dl/page-speed/psol/${NPS_VERSION}.tar.gz && \
+    wget --no-check-certificate https://dl.google.com/dl/page-speed/psol/${NPS_VERSION}.tar.gz && \
     tar zxf ${NPS_VERSION}.tar.gz && \
     rm -rf ${NPS_VERSION}.tar.gz && \
 
@@ -62,7 +63,7 @@ RUN cd /usr/src && \
     --lock-path=/var/run/nginx.lock \
     --error-log-path=/var/log/nginx/error.log \
     --http-log-path=/var/log/nginx/access.log \
-    --user=nginx --group=nginx \    
+    --user=nginx --group=nginx \
     --with-http_dav_module \
     --with-http_ssl_module \
     --with-http_realip_module \

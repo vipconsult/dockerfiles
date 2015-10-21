@@ -31,16 +31,10 @@ ENABLE_PLAIN_BACKUPS=yes
 
 #### SETTINGS FOR ROTATED BACKUPS ####
 
-# Which day to take the weekly backup from (1-7 = Monday-Sunday)
-DAY_OF_WEEK_TO_KEEP=1
+DELETE=y
 
-# Number of days to keep daily backups
-DAYS_TO_KEEP=60
-
-# How many weeks to keep weekly backups
-WEEKS_TO_KEEP=5
-
-
+# how many days of backups do you want to keep?
+DAYS=60
 
 
 
@@ -148,39 +142,14 @@ function perform_backups()
         echo -e "\nAll database backups complete!"
 }
 
-# DELETE MONTHLY BACKUPS
-
-DAY_OF_MONTH=`date +%d`
-
-if [ $DAY_OF_MONTH = "1" ];
-then
-        # Delete all expired monthly directories
-        find $BACKDIR -maxdepth 1 -name "*-monthly" -exec rm -rf '{}' ';'
-
-        perform_backups "-monthly"
-
-        exit 0;
-fi
-
-# DELETE WEEKLY BACKUPS
-
-DAY_OF_WEEK=`date +%u` #1-7 (Monday-Sunday)
-EXPIRED_DAYS=`expr $((($WEEKS_TO_KEEP * 7) + 1))`
-
-if [ $DAY_OF_WEEK = $DAY_OF_WEEK_TO_KEEP ];then
-        # Delete all expired weekly directories
-        find $BACKDIR -maxdepth 1 -mtime +$EXPIRED_DAYS -name "*-weekly" -exec rm -rf '{}' ';'
-
-        perform_backups "-weekly"
-
-        exit 0;
-fi
-
-
-# Delete daily backups 7 days old or more
-find $BACKDIR -maxdepth 1 -mtime +$DAYS_TO_KEEP -name "*-daily" -exec rm -rf '{}' ';'
-
 perform_backups "-daily"
+
+if  [ $DELETE = "y" ]; then
+	find $BACKDIR/*/ -type f -mtime +$DAYS -delete;
+        find $BACKDIR -type d -empty -exec rmdir {} \;
+fi
+
+echo "Backups older than $DAYS days have been deleted."
 
 
 echo "Your Psql backup is complete!"
