@@ -12,30 +12,35 @@ cn="mysql1"
 if [ "$1" == "" ] || [ $1 == $cn ] ;then
 echo "Starting $cn"
 	docker run --name $cn --restart=always -d  \
+                --log-driver=syslog \
+                --log-opt syslog-tag=$cn \
 		-p 127.0.0.1:3306:3306 \
 		-v /home/mysql:/var/lib/mysql \
 		-v /etc/localtime:/etc/localtime:ro \
                 -v /etc/timezone:/etc/timezone:ro \
 		-e MYSQL_ROOT_PASSWORD=aaaa  \
-		vipconsult/mysql
+		mysql:5.6
 fi
 
 cn="psql1"
 if [ "$1" == "" ] || [ $1 == $cn ] ;then
 echo "Starting $cn"
 	docker run --name $cn --restart=always -d \
+                --log-driver=syslog \
+                --log-opt syslog-tag=$cn \
 		-p 127.0.0.1:5432:5432 \
 		-v /home/postgresql:/var/lib/postgresql/data \
 		-v /etc/localtime:/etc/localtime:ro \
                 -v /etc/timezone:/etc/timezone:ro \
-		-e PG_LOCALE="en_GB.UTF-8 UTF-8" \
-		vipconsult/pgsql93
+		vipconsult/postgres
 fi
 
 cn="smtp"
 if [ "$1" == "" ] || [ $1 == $cn ] ;then
 echo "Starting $cn"
         docker run --restart=always -d --name $cn \
+                --log-driver=syslog \
+                --log-opt syslog-tag=$cn \
 		-v /etc/localtime:/etc/localtime:ro \
 		-v /etc/timezone:/etc/timezone:ro \
                 -h vip-consult.co.uk \
@@ -47,6 +52,8 @@ cn="php53"
 if [ "$1" == "" ] || [ $1 == $cn ] ;then
 echo "Starting $cn"
 	docker run --name $cn --restart=always -d \
+                --log-driver=syslog \
+                --log-opt syslog-tag=$cn \
 		-v /var/run:/var/run \
 		-v /home/http:/home/http  \
                 -v /etc/localtime:/etc/localtime:ro \
@@ -63,6 +70,8 @@ cn="php"
 if [ "$1" == "" ] || [ $1 == $cn ] ;then
 echo "Starting $cn"
 	docker run --name $cn --restart=always -d \
+                --log-driver=syslog \
+                --log-opt syslog-tag=$cn \
 		-v /var/run:/var/run \
 		-v /home/http:/home/http  \
                 -v /etc/localtime:/etc/localtime:ro \
@@ -79,6 +88,8 @@ cn="simplehelp"
 if [ "$1" == "" ] || [ $1 == $cn ] ;then
 echo "Starting $cn"
 	docker run --name $cn --restart=always -d \
+                --log-driver=syslog \
+                --log-opt syslog-tag=$cn \
 		-v /home/simplehelp:/home/simplehelp  \
                 -v /etc/localtime:/etc/localtime:ro \
                 -v /etc/timezone:/etc/timezone:ro \
@@ -90,6 +101,8 @@ cn="nginx"
 if [ "$1" == "" ] || [ $1 == $cn ] ;then
 echo "Starting $cn"
 	docker run --name $cn --restart=always -d \
+                --log-driver=syslog \
+                --log-opt syslog-tag=$cn \
 		-v /home/http:/home/http \
 		-v /var/run:/var/run \
                 -v /etc/localtime:/etc/localtime:ro \
@@ -103,6 +116,8 @@ cn="cron"
 if [ "$1" == "" ] || [ $1 == $cn ] ;then
 echo "Starting $cn"
 	docker run --name $cn --restart=always -d \
+                --log-driver=syslog \
+                --log-opt syslog-tag=$cn \
 		--link mysql1:mysql1 \
 		-v /home/http:/home/http  \
                 -v /etc/localtime:/etc/localtime:ro \
@@ -119,6 +134,8 @@ echo "Starting $cn"
 	sudo touch /home/proftpd/ftpd.passwd
 
 	docker run --name $cn --restart=always -d \
+                --log-driver=syslog \
+                --log-opt syslog-tag=$cn \
 		--net=host \
 		-v /home/:/home/ \
                 -v /etc/localtime:/etc/localtime:ro \
@@ -127,27 +144,43 @@ echo "Starting $cn"
 		vipconsult/proftpd
 fi
 
-cn="logrotate"
-if [ "$1" == "" ] || [ $1 == $cn ] ;then
-echo "Starting $cn"
-	docker run --name $cn --restart=always -d \
-		-v /var/lib/docker:/var/lib/docker \
-		-h vip-consult.co.uk \
-		-v /etc/localtime:/etc/localtime:ro \
-                -v /etc/timezone:/etc/timezone:ro \
-		vipconsult/logrotate
-fi
+#cn="logrotate"
+#if [ "$1" == "" ] || [ $1 == $cn ] ;then
+#echo "Starting $cn"
+#	docker run --name $cn --restart=always -d \
+#		-v /var/lib/docker:/var/lib/docker \
+#		-h vip-consult.co.uk \
+#		-v /etc/localtime:/etc/localtime:ro \
+#                -v /etc/timezone:/etc/timezone:ro \
+#		vipconsult/logrotate
+#fi
 
 cn="fs"
 if [ "$1" == "" ] || [ $1 == $cn ] ;then
 echo "Starting $cn"
-	sudo docker run --name $cn \
-        	--restart=always -d \
+	sudo docker run --name $cn --restart=always -d \
+                --log-driver=syslog \
+                --log-opt syslog-tag=$cn \
 	        -v /home/freeswitch/sounds:/usr/local/freeswitch/sounds \
         	-v /home/freeswitch/conf:/usr/local/freeswitch/conf \
 		-v /home/freeswitch/ssl:/usr/local/freeswitch/ssl \
 		-v /etc/localtime:/etc/localtime:ro \
 		-v /etc/timezone:/etc/timezone:ro \
 	        --net=host \
-	        vipconsult/freeswitch
+	        vipconsult/freeswitch:1.4
+fi
+
+cn="fs1"
+if [ "$1" == "" ] || [ $1 == $cn ] ;then
+echo "Starting $cn"
+        sudo docker run --restart=always -d --name $cn \
+                --log-driver=syslog \
+                --log-opt syslog-tag=$cn \
+                -v /etc/localtime:/etc/localtime:ro \
+                -v /etc/timezone:/etc/timezone:ro \
+                -v /home/freeswitch:/usr/local/freeswitch/conf \
+                -v /home/freeswitch/fs_cli.conf:/etc/fs_cli.conf \
+                -v /home/freeswitch/odbc.ini:/etc/odbc.ini \
+                --net=host \
+                vipconsult/freeswitch
 fi
