@@ -1,0 +1,30 @@
+fs:  
+    volumes:
+        - ../freeswitch/:/usr/local/freeswitch/conf
+        - ../freeswitch/fs_cli.conf:/etc/fs_cli.conf
+        - ../freeswitch/odbc.ini:/etc/odbc.ini
+        - ../freeswitch/storage:/usr/local/freeswitch/storage
+    extends:
+        file: common-prod.yml
+        service: common
+    image: vipconsult/fs 
+
+ftp:
+    extends:
+        file: common-prod.yml
+        service: common
+    image: vipconsult/proftpd
+    
+logger:
+    extends:
+        file: common-prod.yml
+        service: common
+
+simplehelp:
+    extends:
+        file: common-prod.yml
+        service: common
+    ports: 
+        - 212.71.232.67:80:80
+        - 212.71.232.67:443:443
+    image: vipconsult/simplehelp

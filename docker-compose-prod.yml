@@ -1,0 +1,47 @@
+nginx:
+    extends:
+        file: common-prod.yml
+        service: common
+    command: nginx -c /home/http/default/main.conf -g "daemon off;"
+    image: vipconsult/nginx
+
+php53:
+    extends:
+        file: common-prod.yml
+        service: common
+    image: vipconsult/php:5.3
+    
+php:
+    extends:
+        file: common-prod.yml
+        service: common
+    image: vipconsult/php
+
+memcached:
+    extends:
+        file: common-prod.yml
+        service: common
+    image: memcached:1.4.24
+    
+smtp:
+    extends:
+        file: common-prod.yml
+        service: common
+    image: vipconsult/smtp
+    
+mysql:
+    extends:
+        file: common-prod.yml
+        service: common
+
+psql:
+    extends:
+        file: common-prod.yml
+        service: common
+    image: vipconsult/postgres
+    
+cron:  
+    extends:
+        file: common-prod.yml
+        service: common
+    image: vipconsult/cron

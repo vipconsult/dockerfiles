@@ -1,5 +1,27 @@
-FROM debian:wheezy
+FROM php:5.6-fpm
 MAINTAINER Krasimir Georgiev <support@vip-consult.co.uk>
+
+# Install modules
+RUN apt-get update && apt-get install -y \
+        libfreetype6-dev \
+        libjpeg62-turbo-dev \
+        libmcrypt-dev \
+        libpng12-dev \
+    && docker-php-ext-install mcrypt \
+    && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
+    && docker-php-ext-install gd
+
+# Setup supervisor
+RUN apt-get install -y supervisor && \
+    sed -i -e "s/var\/run\/\/supervisor.sock/var\/run\/\/supervisor_php.sock/g" /etc/supervisor/supervisord.conf
+
+ADD supervisord.conf /etc/supervisor/conf.d/
+
+RUN apt-get purge -y --auto-remove && rm -rf /var/lib/apt/lists/* && apt-get clean
+
+CMD ["/usr/bin/supervisord"]
+
+
 
 RUN apt-get update && apt-get install -y --no-install-recommends wget
 
@@ -21,8 +43,6 @@ RUN 	apt-get install -y --no-install-recommends \
         php5-mcrypt \
         php5-memcache \
         php5-curl \
-        php5-memcache \
-        memcached \
         ssmtp
 
 RUN sed -i "s/^.*FromLineOverride.*$/FromLineOverride=YES/" /etc/ssmtp/ssmtp.conf && \
@@ -45,8 +65,8 @@ RUN sed -i "s/^.*FromLineOverride.*$/FromLineOverride=YES/" /etc/ssmtp/ssmtp.con
     sed -i 's/^.*daemonize.*$/daemonize = no/' /etc/php5/fpm/php-fpm.conf && \
 
     sed -i 's/^.*listen =.*$/listen = \/var\/run\/php5-fpm.sock/' /etc/php5/fpm/pool.d/www.conf && \
-    sed -i 's/^.*listen.owner =.*$/listen.owner = www-data/' /etc/php5/fpm/pool.d/www.conf && \
-    sed -i 's/^.*listen.group =.*$/listen.group = www-data/' /etc/php5/fpm/pool.d/www.conf
+    sed -i 's/^.*listen.owner =.*$/listen.owner = nobody/' /etc/php5/fpm/pool.d/www.conf && \
+    sed -i 's/^.*listen.group =.*$/listen.group = nogroup/' /etc/php5/fpm/pool.d/www.conf
 
 # Setup supervisor
 RUN apt-get install -y supervisor && \

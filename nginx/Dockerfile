@@ -2,23 +2,23 @@
 # Nginx with Pagespeed
 ###
 
-FROM debian:wheezy
+FROM debian:jessie
 
 MAINTAINER Krasimir Georgiev <support@vip-consult.co.uk>
 
 # Version
-ENV NGINX_VERSION 1.7.10
-ENV NPS_VERSION 1.9.32.3
-ENV OPENSSL_VERSION 1.0.2
+ENV NGINX_VERSION 1.8.0
+ENV NPS_VERSION 1.9.32.10
+ENV OPENSSL_VERSION 1.0.2d
 
 # Install Build Tools & Dependence
-RUN printf "deb-src http://http.debian.net/debian wheezy main\ndeb-src http://http.debian.net/debian wheezy-updates main\ndeb-src http://security.debian.org/ wheezy/updates main" >> /etc/apt/sources.list
+RUN printf "deb http://ftp.uk.debian.org/debian/ jessie main contrib non-free \n \
+            deb-src http://ftp.uk.debian.org/debian/ jessie main contrib non-free\n"  \
+            >> /etc/apt/sources.list
 
 RUN apt-get update && \
-    apt-get install autotools-dev && \
-    apt-get build-dep nginx-full -y && \
-    apt-get install -y build-essential zlib1g-dev libpcre3 libpcre3-dev && \
-    apt-get install wget -y && \
+    apt-get install -y --no-install-recommends wget autotools-dev zlib1g-dev libpcre3 libpcre3-dev && \
+    apt-get build-dep nginx-full -y --no-install-recommends && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
@@ -63,7 +63,7 @@ RUN cd /usr/src && \
     --lock-path=/var/run/nginx.lock \
     --error-log-path=/var/log/nginx/error.log \
     --http-log-path=/var/log/nginx/access.log \
-    --user=nginx --group=nginx \
+    --user=nobody --group=nogroup \
     --with-http_dav_module \
     --with-http_ssl_module \
     --with-http_realip_module \
@@ -98,4 +98,4 @@ VOLUME ["/var/cache/nginx", "/var/cache/ngx_pagespeed"]
 
 EXPOSE 80 443
 
-CMD ["nginx", "-g", "daemon off;"]
+CMD ["nginx","-c","/home/http/default/main.conf","-g", "daemon off;"]

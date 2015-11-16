@@ -1,0 +1,12 @@
+common:
+    restart: always
+    dns:
+        - 208.67.222.222
+        - 208.67.220.220
+    volumes:
+        - /etc/localtime:/etc/localtime:ro
+        - /etc/timezone:/etc/timezone:ro
+    hostname: "prod"
+    domainname: "vip-consult.co.uk"
+    env_file:
+        - env-prod
