@@ -22,6 +22,13 @@ php53:
         file: common.yml
         service: common
     build: php53/
+
+memcached:
+    cpu_shares: 256
+    extends:
+        file: common.yml
+        service: common
+    image: memcached:1.4.24    
     
 php:
     cpu_shares: 512
@@ -35,20 +42,15 @@ php:
         service: common
     build: php/
 
-memcached:
-    cpu_shares: 256
-    extends:
-        file: common.yml
-        service: common
-    image: memcached:1.4.24
+
     
 smtp:
     extends:
         file: common.yml
         service: common
-    ports: 
-        - 127.0.0.1:25:25
     # so that when we restart the container the mailq is preserved
+    ports:
+        - 127.0.0.1:25:25
     volumes:
         - ../exim:/var/spool/exim4
     build: smtp/
@@ -66,6 +68,7 @@ psql:
   
 mysql:
     cpu_shares: 1024
+    # so that we can connect shrough ssh
     ports:
         - 127.0.0.1:3306:3306
     volumes:

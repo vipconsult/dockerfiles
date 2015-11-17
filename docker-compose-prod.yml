@@ -1,47 +1,61 @@
 nginx:
-    extends:
-        file: common-prod.yml
-        service: common
-    command: nginx -c /home/http/default/main.conf -g "daemon off;"
+    env_file:
+        - env-prod
     image: vipconsult/nginx
+    extends:
+        file: docker-compose.yml
+        service: nginx
 
 php53:
-    extends:
-        file: common-prod.yml
-        service: common
+    env_file:
+        - env-prod
     image: vipconsult/php:5.3
+    extends:
+        file: docker-compose.yml
+        service: php53
     
 php:
-    extends:
-        file: common-prod.yml
-        service: common
+    env_file:
+        - env-prod
     image: vipconsult/php
+    extends:
+        file: docker-compose.yml
+        service: php
 
 memcached:
+    env_file:
+        - env-prod
     extends:
-        file: common-prod.yml
-        service: common
-    image: memcached:1.4.24
+        file: docker-compose.yml
+        service: memcached
     
 smtp:
-    extends:
-        file: common-prod.yml
-        service: common
+    env_file:
+        - env-prod
     image: vipconsult/smtp
+    extends:
+        file: docker-compose.yml
+        service: smtp
     
 mysql:
+    env_file:
+        - env-prod
     extends:
-        file: common-prod.yml
-        service: common
+        file: docker-compose.yml
+        service: mysql
 
 psql:
-    extends:
-        file: common-prod.yml
-        service: common
+    env_file:
+        - env-prod
     image: vipconsult/postgres
+    extends:
+        file: docker-compose.yml
+        service: psql
     
 cron:  
-    extends:
-        file: common-prod.yml
-        service: common
+    env_file:
+        - env-prod
     image: vipconsult/cron
+    extends:
+        file: docker-compose.yml
+        service: cron

@@ -1,3 +1,4 @@
+## this file is for service that are always on and independant from  the web services 
 fs:  
     cpu_shares: 256
     privileged: true

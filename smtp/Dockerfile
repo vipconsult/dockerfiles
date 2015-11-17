@@ -9,6 +9,6 @@ ADD update-exim4.conf.conf /etc/exim4/update-exim4.conf.conf
 ADD supervisord.conf /etc/supervisor/conf.d/
 ADD setup.sh setup.sh
 
-RUN apt-get purge -y --auto-remove && rm -rf /var/lib/apt/lists/* && apt-get clean
+RUN rm -rf /var/lib/apt/lists/* && apt-get clean
 
 CMD ["/usr/bin/supervisord"]
