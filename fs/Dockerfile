@@ -1,19 +1,15 @@
-# VERSION 1.0
-# Freeswitch Version  1.6
-# AUTHOR:         Krasimir Georgiev <support@vip-consult.co.uk>
-# DESCRIPTION:    Freeswitch Image Container 
+FROM vipconsult/base:jessie
+MAINTAINER Krasimir Georgiev <support@vip-consult.co.uk>
 
-FROM debian:jessie
-
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends wget && \
-    echo "deb http://files.freeswitch.org/repo/deb/freeswitch-1.6/ jessie main" > /etc/apt/sources.list.d/99FreeSWITCH.test.list && \
+RUN echo "deb http://files.freeswitch.org/repo/deb/freeswitch-1.6/ jessie main" > /etc/apt/sources.list.d/99FreeSWITCH.test.list && \
     wget -O - http://files.freeswitch.org/repo/deb/freeswitch-1.6/key.gpg |apt-key add -  && \
     apt-get update
 
-RUN DEBIAN_FRONTEND=none APT_LISTCHANGES_FRONTEND=none apt-get install -y --force-yes freeswitch-video-deps-most \
+RUN apt-get install freeswitch-video-deps-most \
         unixodbc-dev odbc-postgresql \
         libspeex-dev
+
+
         #apt-get install -y --no-install-recommends \
         #make curl wget adduser autoconf automake devscripts gawk g++ git-core ca-certificates \
         #libjpeg-dev libncurses5-dev libtool make python-dev gawk pkg-config \

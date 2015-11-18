@@ -1,9 +1,4 @@
-###
-# Nginx with Pagespeed
-###
-
-FROM debian:jessie
-
+FROM vipconsult/base:jessie
 MAINTAINER Krasimir Georgiev <support@vip-consult.co.uk>
 
 # Version
@@ -11,14 +6,9 @@ ENV NGINX_VERSION 1.8.0
 ENV NPS_VERSION 1.9.32.10
 ENV OPENSSL_VERSION 1.0.2d
 
-# Install Build Tools & Dependence
-RUN printf "deb http://ftp.uk.debian.org/debian/ jessie main contrib non-free \n \
-            deb-src http://ftp.uk.debian.org/debian/ jessie main contrib non-free\n"  \
-            >> /etc/apt/sources.list
 
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends wget autotools-dev zlib1g-dev libpcre3 libpcre3-dev && \
-    apt-get build-dep nginx-full -y --no-install-recommends && \
+RUN apt-get install autotools-dev zlib1g-dev libpcre3 libpcre3-dev && \
+    apt-get build-dep nginx-full && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 

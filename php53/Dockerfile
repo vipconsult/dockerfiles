@@ -1,19 +1,7 @@
-FROM debian:squeeze
+FROM vipconsult/base:squeeze
 MAINTAINER Krasimir Georgiev <support@vip-consult.co.uk>
 
-RUN apt-get update && \
-    apt-get install -y wget
- 
-RUN echo 'deb http://packages.dotdeb.org squeeze all' >> /etc/apt/sources.list && \
-    echo 'deb-src http://packages.dotdeb.org squeeze all' >> /etc/apt/sources.list && \
-    apt-get install -y wget && \
-    wget http://www.dotdeb.org/dotdeb.gpg && \
-    apt-key add dotdeb.gpg && \
-    rm dotdeb.gpg && \
-    apt-get update 
-
-
-RUN apt-get install -y --no-install-recommends \
+RUN apt-get install \
         php5 \
         php5-fpm \
         php5-gd \
