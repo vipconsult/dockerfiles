@@ -2,8 +2,8 @@ FROM debian:squeeze
 MAINTAINER Krasimir Georgiev <support@vip-consult.co.uk>
 
 ENV TERM xterm
-ENV DEBIAN_FRONTEND none 
-ENV APT_LISTCHANGES_FRONTEND none
+ENV DEBIAN_FRONTEND noninteractive 
+ENV APT_LISTCHANGES_FRONTEND noninteractive
 
 RUN echo 'APT::NeverAutoRemove "0";' >> /etc/apt/apt.conf.d/01usersetting && \
     echo 'APT::Get::AllowUnauthenticated "1";' >> /etc/apt/apt.conf.d/01usersetting && \

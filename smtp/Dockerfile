@@ -1,14 +1,11 @@
-FROM debian:jessie
+FROM vipconsult/base:jessie
 MAINTAINER Krasimir Georgiev <support@vip-consult.co.uk>
 
-RUN apt-get update
-    
-RUN apt-get install -y exim4 --no-install-recommends supervisor 
+RUN apt-get install exim4 supervisor &&  \
+    rm -rf /var/lib/apt/lists/* && apt-get clean
         
 ADD update-exim4.conf.conf /etc/exim4/update-exim4.conf.conf
 ADD supervisord.conf /etc/supervisor/conf.d/
 ADD setup.sh setup.sh
-
-RUN rm -rf /var/lib/apt/lists/* && apt-get clean
 
 CMD ["/usr/bin/supervisord"]

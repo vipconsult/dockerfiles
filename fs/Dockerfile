@@ -3,9 +3,9 @@ MAINTAINER Krasimir Georgiev <support@vip-consult.co.uk>
 
 RUN echo "deb http://files.freeswitch.org/repo/deb/freeswitch-1.6/ jessie main" > /etc/apt/sources.list.d/99FreeSWITCH.test.list && \
     wget -O - http://files.freeswitch.org/repo/deb/freeswitch-1.6/key.gpg |apt-key add -  && \
-    apt-get update
-
-RUN apt-get install freeswitch-video-deps-most \
+    apt-get update && \
+    apt-get install \
+        freeswitch-video-deps-most \
         unixodbc-dev odbc-postgresql \
         libspeex-dev
 
@@ -43,10 +43,9 @@ RUN echo "net.core.rmem_max = 16777216" > /etc/sysctl.d/vid.conf && \
     adduser --disabled-password --quiet --system --home /usr/local/freeswitch --gecos "FreeSWITCH Voice Platform" --ingroup daemon freeswitch && \
     chown -R freeswitch:daemon /usr/local/freeswitch/  && \
     chmod -R ug=rwX,o= /usr/local/freeswitch/ && \
-    chmod -R u=rwx,g=rx /usr/local/freeswitch/bin/*
+    chmod -R u=rwx,g=rx /usr/local/freeswitch/bin/* && \
 
-# Clean up system
-RUN rm -R /usr/src/* \
+    rm -R /usr/src/* \
     && apt-get clean && rm -rf /tmp/* /var/tmp/* && rm -rf /var/lib/apt/lists/*
 
 ENTRYPOINT /usr/local/freeswitch/bin/freeswitch

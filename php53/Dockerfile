@@ -12,7 +12,11 @@ RUN apt-get install \
         php5-cli \
         php5-dev \
         php5-memcache \
-        ssmtp
+        ssmtp && \
+        apt-get purge -y --auto-remove && \
+        rm -rf /var/lib/apt/lists/* && \
+        apt-get clean
+
 
 RUN sed -i "s/^.*FromLineOverride.*$/FromLineOverride=YES/" /etc/ssmtp/ssmtp.conf && \
     sed -i -e "s/;\?max_input_time =.*/max_input_time = 300/" /etc/php5/fpm/php.ini && \
@@ -24,11 +28,6 @@ RUN sed -i "s/^.*FromLineOverride.*$/FromLineOverride=YES/" /etc/ssmtp/ssmtp.con
     sed -i -e "s/;\?access.log =.*/access.log = \/proc\/self\/fd\/2/" /etc/php5/fpm/pool.d/www.conf && \
     sed -i -e "s/;\?error_log =.*/error_log = \/proc\/self\/fd\/2/" /etc/php5/fpm/pool.d/www.conf && \
     sed -i -e "s/;\?pm.status_path =.*/pm.status_path = \/status/" /etc/php5/fpm/pool.d/www.conf
-
-# security enhancements
-RUN find / -perm +6000 -type f -exec chmod a-s {} \; || true
-
-RUN apt-get purge -y --auto-remove && rm -rf /var/lib/apt/lists/* && apt-get clean
 
 
 ADD start.sh start.sh

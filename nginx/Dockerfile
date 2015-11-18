@@ -6,6 +6,7 @@ ENV NGINX_VERSION 1.8.0
 ENV NPS_VERSION 1.9.32.10
 ENV OPENSSL_VERSION 1.0.2d
 
+# Install Build Tools & Dependence
 
 RUN apt-get install autotools-dev zlib1g-dev libpcre3 libpcre3-dev && \
     apt-get build-dep nginx-full && \
@@ -81,8 +82,8 @@ RUN cd /usr/src && \
 
 
 # Forward requests and errors to docker logs
-RUN mkdir -p /var/log/nginx && ln -sf /dev/stdout /var/log/nginx/access.log
-RUN mkdir -p /var/log/nginx && ln -sf /dev/stderr /var/log/nginx/error.log
+RUN mkdir -p /var/log/nginx && ln -sf /dev/stdout /var/log/nginx/access.log && \
+    mkdir -p /var/log/nginx && ln -sf /dev/stderr /var/log/nginx/error.log
 
 VOLUME ["/var/cache/nginx", "/var/cache/ngx_pagespeed"]
 
