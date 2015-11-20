@@ -2,21 +2,82 @@ FROM php:5.6-fpm
 MAINTAINER Krasimir Georgiev <support@vip-consult.co.uk>
 
 # Install modules
-RUN apt-get update && apt-get install -y \
-        libfreetype6-dev \
-        libjpeg62-turbo-dev \
-        libmcrypt-dev \
-        libpng12-dev \
-    && docker-php-ext-install mcrypt \
-    && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
-    && docker-php-ext-install gd
+RUN echo 'APT::NeverAutoRemove "0";' >> /etc/apt/apt.conf.d/01usersetting && \
+    echo 'APT::Get::AllowUnauthenticated "1";' >> /etc/apt/apt.conf.d/01usersetting && \
+    echo 'APT::Update::AllowUnauthenticated "1";' >> /etc/apt/apt.conf.d/01usersetting && \
+    echo 'APT::Install-Suggests "0";' >> /etc/apt/apt.conf.d/01usersetting && \
+    echo 'APT::Install-Recommends "0";' >> /etc/apt/apt.conf.d/01usersetting && \
+    echo 'APT::Get::Assume-Yes "true";' >> /etc/apt/apt.conf.d/01usersetting && \
+    echo 'APT::Get::force-yes "true";' >> /etc/apt/apt.conf.d/01usersetting && \
 
-# Setup supervisor
-RUN apt-get install -y supervisor && \
-    sed -i -e "s/var\/run\/\/supervisor.sock/var\/run\/\/supervisor_php.sock/g" /etc/supervisor/supervisord.conf
+    apt-get update && \
+    apt-get install wget && \
+    apt-get install libmcrypt-dev && \
+        docker-php-ext-install mcrypt  && \
+    apt-get install libfreetype6-dev libjpeg62-turbo-dev libpng12-dev && \
+        docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ &&\
+        docker-php-ext-install gd && \
+    ## imagick
+    apt-get install libmagickwand-dev && \
+        curl -L https://pecl.php.net/get/imagick-3.3.0RC2.tgz >> /usr/src/php/ext/imagick.tgz && \
+        tar -xf /usr/src/php/ext/imagick.tgz -C /usr/src/php/ext/ && \
+        rm /usr/src/php/ext/imagick.tgz && \
+        docker-php-ext-install imagick-3.3.0RC2 && \
+        docker-php-ext-install mysql && \
+        docker-php-ext-install mysqli && \
+    apt-get install libcurl4-openssl-dev && \
+        docker-php-ext-install curl && \
+        docker-php-ext-install exif && \
+        docker-php-ext-install gettext && \
+        docker-php-ext-install mbstring && \
+        docker-php-ext-install pdo_mysql && \
+        docker-php-ext-install shmop && \
+        docker-php-ext-install sockets && \
+        docker-php-ext-install opcache && \
+        docker-php-ext-install zip && \
 
-ADD supervisord.conf /etc/supervisor/conf.d/
+        #pgsql
+    apt-get install libpq-dev && \
+        docker-php-ext-install pgsql && \
+        docker-php-ext-install pdo_pgsql && \
+        #soap
+    apt-get install libxml2-dev && \
+        docker-php-ext-install soap && \
+        docker-php-ext-install wddx && \
+    apt-get install \
+        ssmtp  \
+        nano  \
+        ghostscript && \
+        #pdf builded
+        sed -i "s/^.*FromLineOverride.*$/FromLineOverride=YES/" /etc/ssmtp/ssmtp.conf && \
+        #memcached
+    apt-get install \
+        php-pear curl zlib1g-dev libncurses5-dev && \
+        curl -L http://pecl.php.net/get/memcache-2.2.7.tgz >> /usr/src/php/ext/memcache.tgz && \
+        tar -xf /usr/src/php/ext/memcache.tgz -C /usr/src/php/ext/ && \
+        rm /usr/src/php/ext/memcache.tgz && \
+        docker-php-ext-install memcache-2.2.7 && \
 
-RUN apt-get purge -y --auto-remove && rm -rf /var/lib/apt/lists/* && apt-get clean
+    apt-get purge -y --auto-remove && \
+        rm -rf /var/lib/apt/lists/* && \
+        apt-get clean
 
-CMD ["/usr/bin/supervisord"]
+
+RUN cp /usr/src/php/php.ini-development /usr/local/etc/php/php.ini && \
+    
+    # downlod cert chain as without this curl over https returns an error
+    wget http://curl.haxx.se/ca/cacert.pem --directory-prefix=/usr/local/etc && \
+    wget http://www.symantec.com/content/en/us/enterprise/verisign/roots/Class-3-Public-Primary-Certification-Authority.pem --directory-prefix=/usr/local/etc/ && \
+    cat /usr/local/etc/Class-3-Public-Primary-Certification-Authority.pem >> /usr/local/etc/php/cacert.pem && \
+    rm /usr/local/etc/Class-3-Public-Primary-Certification-Authority.pem && \
+
+    # php.ini lgobal sesstings
+    sed -i 's/^.*curl.cainfo.*$/curl.cainfo =\/usr\/local\/etc\/php\/cacert.pem/' /usr/local/etc/php/php.ini && \
+    sed -i 's/^.*short_open_tag =.*$/short_open_tag = On/' /usr/local/etc/php/php.ini && \
+    if ! grep -lq "pm.status_path =" /usr/local/etc/php-fpm.conf  ; then  printf  "\npm.status_path = /status" >> /usr/local/etc/php-fpm.conf ; else sed -i -e "s/;\?pm.status_path =.*/pm.status_path = \/status/" /usr/local/etc/php-fpm.conf ;fi
+
+ADD start.sh start.sh
+CMD ["./start.sh"]
+
+
+

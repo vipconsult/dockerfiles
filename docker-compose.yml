@@ -4,7 +4,6 @@ nginx:
         - "80:80"
         - "443:443"
     volumes:
-        - /var/run:/var/run
         - ../http:/home/http
     extends:
         file: common.yml
@@ -15,7 +14,6 @@ php53:
     cpu_shares: 512
     volumes:
         - ../http:/home/http
-        - /var/run:/var/run
         # saves the sessions there so that when the container is restarted the sessions are not deleted
         - /tmp:/tmp
     extends:
@@ -30,17 +28,18 @@ memcached:
         service: common
     image: memcached:1.4.24    
     
-php:
+php5:
     cpu_shares: 512
     volumes:
         - ../http:/home/http
-        - /var/run:/var/run
         # saves the sessions there so that when the container is restarted the sessions are not deleted
         - /tmp:/tmp
+        #- ../docker/php/start.sh:/var/www/html/start.sh
     extends:
         file: common.yml
         service: common
     build: php/
+    #command: ping google.com
 
 
     
@@ -60,7 +59,7 @@ psql:
     ports:
         - 127.0.0.1:5432:5432
     volumes:
-        - ../../postgresql:/var/lib/postgresql/data
+        - ../postgresql:/var/lib/postgresql/data
     extends:
         file: common.yml
         service: common
