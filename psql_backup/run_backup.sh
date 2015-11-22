@@ -9,7 +9,7 @@ SERVER=${backup_container:="localhost"}
 
 # This dir will be created if it doesn't exist.  This must be writable by the user the script is
 # running as.
-BACKDIR=${backup_dir:="/home/psql_backup/"}
+BACKDIR=${backup_dir:="/home/vipconsult/psql_backup/"}
 FINAL_BACKDIR=$BACKDIR"/`date +\%Y-\%m-\%d`/"
 # set to 'y' if you'd like to be emailed the backup (requires mutt)
 

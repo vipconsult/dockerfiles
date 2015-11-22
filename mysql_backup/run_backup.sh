@@ -4,7 +4,7 @@
 SERVER=${backup_container:=`hostname`}
 
 # directory to backup to. It is now set to  same directory where the script file is.
-BACKDIR=${backup_dir:="/home/mysql_backup"}
+BACKDIR=${backup_dir:="/home/vipconsult/mysql_backup"}
 
 # date format that is appended to filename
 DATE=`date +'%d-%m-%Y'`
