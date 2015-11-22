@@ -3,11 +3,11 @@ fs:
     cpu_shares: 256
     privileged: true
     net: host
-    volumes:
-        - ../freeswitch/main:/usr/local/freeswitch/conf
-        - ../freeswitch/main/fs_cli.conf:/etc/fs_cli.conf
-        - ../freeswitch/main/odbc.ini:/etc/odbc.ini
-        - ../freeswitch/main/storage:/usr/local/freeswitch/storage
+    #volumes:
+    #    - ../freeswitch/master:/usr/local/freeswitch/conf
+    #    - ../freeswitch/master/fs_cli.conf:/etc/fs_cli.conf
+    #    - ../freeswitch/master/odbc.ini:/etc/odbc.ini
+    #    - ../freeswitch/master/storage:/usr/local/freeswitch/storage
     extends:
         file: common.yml
         service: common
@@ -23,19 +23,18 @@ ftp:
         service: common   
     build: proftpd/
 
-#simplehelp:
-#    extends:
-#        file: common.yml
-#        service: common
-#    ports: 
-#        - 139.162.199.192:80:80
-#        - 139.162.199.192:443:443
-#    volumes:
-#        - ../simplehelp:/home/simplehelp
-#    build: simplehelp/
+simplehelp:
+    extends:
+        file: common.yml
+        service: common
+    #ports: 
+    #    - 139.162.199.192:80:800
+    #    - 139.162.199.192:443:4430
+    volumes:
+        - ../simplehelp:/home/simplehelp
+    build: simplehelp/
 
 logger:
-    privileged: true
     volumes:
         - /var/run/docker.sock:/var/run/docker.sock:ro
     extends:

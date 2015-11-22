@@ -14,13 +14,13 @@ php53:
         file: docker-compose.yml
         service: php53
     
-php:
+php5:
     env_file:
         - env-prod
     image: vipconsult/php
     extends:
         file: docker-compose.yml
-        service: php
+        service: php5
 
 memcached:
     env_file:

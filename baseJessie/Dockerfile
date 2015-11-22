@@ -1,7 +1,6 @@
 FROM debian:jessie
 MAINTAINER Krasimir Georgiev <support@vip-consult.co.uk>
 
-ENV TERM xterm
 ENV DEBIAN_FRONTEND noninteractive 
 ENV APT_LISTCHANGES_FRONTEND noninteractive
 

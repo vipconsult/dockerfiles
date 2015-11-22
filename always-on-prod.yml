@@ -1,38 +1,38 @@
 ## this file is for service that are always on and independant from  the web services 
 fs:  
-    env_file:
-        - env-prod
     volumes:
-        - ../freeswitch/:/usr/local/freeswitch/conf
-        - ../freeswitch/fs_cli.conf:/etc/fs_cli.conf
-        - ../freeswitch/odbc.ini:/etc/odbc.ini
-        - ../freeswitch/storage:/usr/local/freeswitch/storage
+        - ../freeswitch/master/conf:/usr/local/freeswitch/conf
+        - ../freeswitch/master/sounds:/usr/local/freeswitch/sounds
+        - ../freeswitch/master/ssl:/usr/local/freeswitch/ssl
     extends:
         file: always-on.yml
         service: fs
-    image: vipconsult/fs 
-
-ftp:
     env_file:
         - env-prod
+    image: vipconsult/freeswitch:1.4
+
+ftp:
     extends:
         file: always-on.yml
         service: ftp
+    env_file:
+        - env-prod
     image: vipconsult/proftpd
     
 logger:
-    env_file:
-        - env-prod
     extends:
         file: always-on.yml
         service: logger
-
-simplehelp:
     env_file:
         - env-prod
+
+
+simplehelp:
     extends:
         file: always-on.yml
         service: simplehelp
+    env_file:
+        - env-prod
     ports: 
         - 212.71.232.67:80:80
         - 212.71.232.67:443:443
