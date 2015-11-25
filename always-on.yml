@@ -24,6 +24,7 @@ ftp:
     build: proftpd/
 
 simplehelp:
+    net: "host"
     extends:
         file: common.yml
         service: common

@@ -84,15 +84,11 @@ cron:
         - /var/run/docker.sock:/var/run/docker.sock:ro
         - /usr/bin/docker:/usr/bin/docker:ro
         - /usr/lib/x86_64-linux-gnu/libapparmor.so.1:/usr/lib/x86_64-linux-gnu/libapparmor.so.1:ro
-        #- ../cron/crontab:/etc/crontab
     extends:
         file: common.yml
         service: common
     build: cron/
-    environment:
-        - CRONTASK_1=0 3 * * * root docker exec docker_php5_1 php /home/http/vip-consult.co.uk/seo/public/cron.php
-    #command: /start.sh
-    #command: ping google.com
+    
 
 #cn="backend"
 #if [ "$1" == "" ] || [ $1 == $cn ] ;then

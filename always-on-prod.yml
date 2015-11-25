@@ -33,7 +33,4 @@ simplehelp:
         service: simplehelp
     env_file:
         - env-prod
-    ports: 
-        - 212.71.232.67:80:80
-        - 212.71.232.67:443:443
     image: vipconsult/simplehelp
