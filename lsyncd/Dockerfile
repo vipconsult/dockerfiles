@@ -1,21 +1,35 @@
-FROM vipconsult/base
-RUN apt-get update
-apt-get install -y wget unzip cmake make g++  liblua5.2-dev lua5.2 rsync  ssh-client openssh-server supervisor
-wget --no-check-certificate https://github.com/axkibe/lsyncd/archive/master.zip
-unzip master.zip
+FROM vipconsult/base:jessie
+RUN apt-get update && \
+    apt-get install \
+        wget \
+        unzip \
+        cmake \
+        make \
+        g++  \
+        liblua5.2-dev \
+        lua5.2 \
+        rsync  \
+        ssh-client \
+        openssh-server \
+        supervisor && \
+## form some reason sshd doesn't create this folder , but it requires it.
+    mkdir /var/run/sshd && \
+    wget --no-check-certificate https://github.com/axkibe/lsyncd/archive/master.zip && \
+    unzip master.zip &&\
+    cd lsyncd-master/ &&\
+    cmake ./ &&\
+    make  &&\
+    make install &&\
+    apt-get purge wget unzip cmake make g++ &&\
+    apt-get autoremove &&\
+    rm -rf master.zip lsyncd-master
 
-cd lsyncd-master/
-cmake ./
-make 
-make install
-apt-get purge unzip cmake make g++
-rm -rf master.zip lsyncd-master
+RUN echo "StrictHostKeyChecking no" >>/etc/ssh/ssh_config && \
+    echo "UserKnownHostsFile /dev/null" >>/etc/ssh/ssh_config
 
-start ssh server
-start the lsyncd agent
 
-    lsyncd -nodaemon -log Exec CONFIGFILE
+
 ADD supervisord.conf /etc/supervisor/conf.d/
 ADD setup.sh setup.sh
+RUN chmod o+x setup.sh
 CMD ["/usr/bin/supervisord"]
- -v ./keys:/root/.ssh
