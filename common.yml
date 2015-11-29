@@ -1,9 +1,0 @@
-common:
-    restart: always
-    volumes:
-        - /etc/localtime:/etc/localtime:ro
-        - /etc/timezone:/etc/timezone:ro
-        - ~/.bashrc:/root/.bashrc
-        - ~/.bash_history:/root/.bash_history
-    env_file:
-        - env 
