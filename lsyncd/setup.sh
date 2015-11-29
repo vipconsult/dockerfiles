@@ -1,19 +1,20 @@
 #! /bin/bash
 sysctl fs.inotify.max_user_watches=300000 > /dev/null 2>&1
-echo ' 
+echo "
         settings {
-        --   #statusFile = "/dev/stdout",
+            --statusFile = '/dev/stdout',
             insist = true,
-            logfile = "/dev/stdout",
+            logfile = '/dev/stdout',
+            nodaemon   = true,
         }
 
         sync {
            default.rsyncssh,
-           source ="/sync",
-           host ="dev.www.fullertreacymoney.com",
-           --excludeFrom="/etc/lsyncd.exclude",
-           targetdir ="/sync",
-           delete = "running",
+           source ='/sync',
+           host ='$SYNC_SERVER',
+           --excludeFrom='/etc/lsyncd.exclude',
+           targetdir ='/sync',
+           delete = 'running',
            delay = 1,
            rsync = {
              archive = true,
@@ -24,6 +25,4 @@ echo '
              port = 222
            }
         }
-    ' > /etc/lsyncd.conf
-
-
+    " > /etc/lsyncd.conf
