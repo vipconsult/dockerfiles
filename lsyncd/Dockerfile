@@ -24,9 +24,7 @@ RUN apt-get update && \
     apt-get autoremove &&\
     rm -rf master.zip lsyncd-master
 
-RUN echo "StrictHostKeyChecking no" >>/etc/ssh/ssh_config && \
-    echo "UserKnownHostsFile /dev/null" >>/etc/ssh/ssh_config
-
+RUN echo "StrictHostKeyChecking no" >>/etc/ssh/ssh_config
 
 
 ADD supervisord.conf /etc/supervisor/conf.d/
