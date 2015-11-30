@@ -84,7 +84,7 @@ if [ -n "${PHP53_save_handler}" ]; then
     
     ## if it has a load balancing server it needs to save the sessions on both in case the client hits different servers on another request
     if [ -n "${LB_SERVER}" ]; then
-        sed -i -e "s/.*session.save_path =.*/session.save_path = \"tcp:\/\/$MEMCACHED_SERVER:11211?persistent=1\&weight=1\&timeout=1\&retry_interval=15,tcp:\/\/$LB_SERVER:11211?persistent=1\&weight=1\&timeout=1\&retry_interval=15\"/" $iniFile
+        sed -i -e "s/.*session.save_path =.*/session.save_path = \"tcp:\/\/$MEMCACHED_SERVER:11211?persistent=1\&weight=1\&timeout=1\&retry_interval=15, tcp:\/\/$LB_SERVER:11211?persistent=1\&weight=1\&timeout=1\&retry_interval=15\"/" $iniFile
     else
         sed -i -e "s/.*session.save_path =.*/session.save_path = \"tcp:\/\/$MEMCACHED_SERVER:11211?persistent=1\&weight=1\&timeout=1\&retry_interval=15\"/" $iniFile
     fi

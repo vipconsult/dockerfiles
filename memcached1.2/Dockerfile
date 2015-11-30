@@ -1,4 +1,4 @@
-FROM vipconsult/base:squeeze
+FROM vipconsult/base:jessie
 
 RUN apt-get install wget unzip make automake g++ libevent-dev && \
     wget --no-check-certificate https://github.com/memcached/memcached/archive/1.2.1.zip && \
