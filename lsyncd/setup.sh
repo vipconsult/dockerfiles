@@ -11,7 +11,7 @@ echo "
         sync {
            default.rsyncssh,
            source ='/sync',
-           host ='$SYNC_SERVER',
+           host ='$LB_SERVER',
            --excludeFrom='/etc/lsyncd.exclude',
            targetdir ='/sync',
            delete = 'running',
