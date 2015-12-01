@@ -1,6 +1,9 @@
 #!/bin/bash
 cronFile=/etc/crontab
 
+echo "SHELL=/bin/sh" >$cronFile
+echo "PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin" >>$cronFile
+
 grep -q "MAILTO=$CRON_EMAIL" $cronFile || {
     echo "MAILTO=$CRON_EMAIL" >> $cronFile
 
