@@ -12,5 +12,6 @@ RUN apt-get install wget unzip make automake g++ libevent-dev && \
     rm -Rf memcached-1.2.1 1.2.1.zip && \
     apt-get purge wget unzip make automake g++ && \
     apt-get autoremove
-
-CMD /usr/local/bin/memcached -u root
+ADD start.sh start.sh
+RUN chmod o+x start.sh
+CMD /start.sh
