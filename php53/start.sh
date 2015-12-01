@@ -79,15 +79,11 @@ if [ -n "${PHP53_group}" ]; then
 else
     sed -i -e "s/.*group =.*/group = nogroup/" $fpmFile
 fi
-if [ -n "${PHP53_save_handler}" ]; then
-    sed -i -e "s/.*session.save_handler =.*/session.save_handler = $PHP53_save_handler/" $iniFile
-    
-    ## if it has a load balancing server it needs to save the sessions on both in case the client hits different servers on another request
-    if [ -n "${LB_SERVER}" ]; then
-        sed -i -e "s/.*session.save_path =.*/session.save_path = \"tcp:\/\/$MEMCACHED_SERVER:11211?persistent=1\&weight=1\&timeout=1\&retry_interval=15, tcp:\/\/$LB_SERVER:11211?persistent=1\&weight=1\&timeout=1\&retry_interval=15\"/" $iniFile
-    else
-        sed -i -e "s/.*session.save_path =.*/session.save_path = \"tcp:\/\/$MEMCACHED_SERVER:11211?persistent=1\&weight=1\&timeout=1\&retry_interval=15\"/" $iniFile
-    fi
+## when using LB lserver use memcached for sessions 
+if [ -n "${LB_SERVER}" ]; then
+    echo "memcache.session_redundancy=3" >> /etc/php5/conf.d/memcache.ini
+    sed -i -e "s/.*session.save_handler =.*/session.save_handler = memcache/" $iniFile
+    sed -i -e "s/.*session.save_path =.*/session.save_path = \"tcp:\/\/$MEMCACHED_SERVER:11211?persistent=1\&weight=1\&timeout=1\&retry_interval=15, tcp:\/\/$LB_SERVER:11211?persistent=1\&weight=1\&timeout=1\&retry_interval=15\"/" $iniFile
 fi
 
 ## process manager settings
