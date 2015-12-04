@@ -1,6 +1,5 @@
 FROM vipconsult/base:jessie
-RUN apt-get update && \
-    apt-get install \
+RUN apt-get install \
         wget \
         unzip \
         cmake \
