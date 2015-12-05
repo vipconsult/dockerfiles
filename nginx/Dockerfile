@@ -4,7 +4,7 @@ MAINTAINER Krasimir Georgiev <support@vip-consult.co.uk>
 # Version
 ENV NGINX_VERSION 1.8.0
 ENV NPS_VERSION 1.9.32.10
-ENV OPENSSL_VERSION 1.0.2d
+ENV OPENSSL_VERSION 1.0.2e
 
 # Install Build Tools & Dependence
 
