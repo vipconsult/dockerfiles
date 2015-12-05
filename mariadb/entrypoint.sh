@@ -6,9 +6,12 @@ if [ "${1:0:1}" = '-' ]; then
         set -- mysqld "$@"
 fi
 
-        
-sed -i "s/.*wsrep_cluster_address=.*/wsrep_cluster_address=gcomm:\/\/$LB_SERVER,$INTERNAL_IP/" /etc/mysql/my.cnf
-sed -i "s/.*wsrep_provider_options=.*/wsrep_provider_options='gmcast.listen_addr=$INTERNAL_IP'/" /etc/mysql/my.cnf         
+# the ip of the other node to connect to and don't wait it is offline        
+sed -i "s/.*wsrep_cluster_address=.*/wsrep_cluster_address=gcomm:\/\/$LB_SERVER?pc.wait_prim=no/" /etc/mysql/my.cnf
+# the galera daemon listens on this ip
+sed -i "s/.*wsrep_provider_options=.*/wsrep_provider_options='gmcast.listen_addr=$INTERNAL_IP'/" /etc/mysql/my.cnf 
+# set the internal ip manually as otherwise the detection doesn't work          
+sed -i "s/.*wsrep_node_address=.*/wsrep_node_address=$INTERNAL_IP/" /etc/mysql/my.cnf         
 
 
 
@@ -109,9 +112,6 @@ fi
 
 if [ -n "${MYSQL_PRIMARY}" ]; then
     set -- mysqld --wsrep-new-cluster
-    
-else
-    set -- mysqld "--wsrep_cluster_address=gcomm://$LB_SERVER?pc.wait_prim=no"
 fi
 
 exec "$@"

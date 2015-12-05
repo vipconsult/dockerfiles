@@ -25,8 +25,10 @@ RUN apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 0xcbcb082a1bb943db 
 # don't reverse lookup hostnames, they are usually another container
 RUN sed -i '/\[mysqld\]/ a skip-host-cache\nskip-name-resolve' /etc/mysql/my.cnf && \
     sed -i "/\[galera\]/ a \
+        # these are added empty as they are replaces with env variables in the entry script
         wsrep_cluster_address= \n \
         wwsrep_provider_options= \n \
+        wsrep_node_address=\n \
         bind-address=127.0.0.1 \n \
         wsrep_provider=\/usr\/lib\/galera\/libgalera_smm.so \n \
         binlog_format=row \n \
