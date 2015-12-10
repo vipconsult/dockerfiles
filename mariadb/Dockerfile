@@ -26,18 +26,20 @@ RUN apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 0xcbcb082a1bb943db 
 RUN sed -i '/\[mysqld\]/ a skip-host-cache\nskip-name-resolve' /etc/mysql/my.cnf && \
     sed -i "/\[galera\]/ a \
         # these are added empty as they are replaces with env variables in the entry script
-        wsrep_cluster_address= \n \
-        wwsrep_provider_options= \n \
-        wsrep_node_address=\n \
-        bind-address=127.0.0.1 \n \
-        wsrep_provider=\/usr\/lib\/galera\/libgalera_smm.so \n \
-        binlog_format=row \n \
-        default_storage_engine=InnoDB \n \
-        innodb_autoinc_lock_mode=2 \n \
-        innodb_doublewrite=1 \n \
-        query_cache_size=0 \n \
-        wsrep_on=on \n \
-        innodb_flush_log_at_trx_commit=0 \n \
+        wsrep_cluster_address = \n \
+        wsrep_provider_options = \n \
+        wsrep_node_address =\n \
+        wsrep_sst_auth =\n \
+        bind-address = 0.0.0.0 \n \
+        wsrep_provider = \/usr\/lib\/galera\/libgalera_smm.so \n \
+        wsrep_sst_method = xtrabackup-v2 \n \
+        binlog_format = row \n \
+        default_storage_engine = InnoDB \n \
+        innodb_autoinc_lock_mode = 2 \n \
+        innodb_doublewrite = 1 \n \
+        query_cache_size = 0 \n \
+        wsrep_on = on \n \
+        innodb_flush_log_at_trx_commit = 0 \n \
         " /etc/mysql/my.cnf
 
 COPY entrypoint.sh /

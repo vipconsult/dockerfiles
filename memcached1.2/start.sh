@@ -1,2 +1,2 @@
 #! /bin/bash
-/usr/local/bin/memcached -u root -l $INTERNAL_IP
+/usr/local/bin/memcached -u root
