@@ -88,5 +88,7 @@ RUN mkdir -p /var/log/nginx && ln -sf /dev/stdout /var/log/nginx/access.log && \
 VOLUME ["/var/cache/nginx", "/var/cache/ngx_pagespeed"]
 
 EXPOSE 80 443
+ADD entrypoint.sh entrypoint.sh
+ENTRYPOINT ["/entrypoint.sh"]
 
 CMD ["nginx","-c","/home/http/default/main.conf","-g", "daemon off;"]

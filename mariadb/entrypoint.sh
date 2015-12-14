@@ -6,25 +6,22 @@ if [ "${1:0:1}" = '-' ]; then
         set -- mysqld "$@"
 fi
 
-if [ -n "${LB_SERVER}" ]; then      
+if [ -n "${MYSQL_CLUSTER}" ]; then      
     # the ip of the other node to connect to and don't wait it is offline  
-    sed -i "s/wsrep_cluster_address =.*/wsrep_cluster_address = gcomm:\/\/$INTERNAL_IP,$LB_SERVER?pc.wait_prim=no/" /etc/mysql/my.cnf
+    sed -i "s/wsrep_cluster_address =.*/wsrep_cluster_address = gcomm:\/\/$MYSQL_CLUSTER?pc.wait_prim=no/" /etc/mysql/my.cnf
     sed -i "s/wsrep_sst_auth =.*/wsrep_sst_auth = root:$MYSQL_ROOT_PASSWORD/" /etc/mysql/my.cnf
 fi
 
-if [ -n "${INTERNAL_IP}" ]; then
-#    # the galera daemon listens on this ip
-#    sed -i "s/.*wsrep_provider_options =.*/wsrep_provider_options='gmcast.listen_addr=$INTERNAL_IP'/" /etc/mysql/my.cnf 
-
-    sed -i "s/.*wsrep_provider_options =.*/wsrep_provider_options = 'gcache.size = 3G'/" /etc/mysql/my.cnf 
-    # set the internal ip manually as otherwise the detection doesn't work   
-    sed -i "s/.*wsrep_node_address =.*/wsrep_node_address = $INTERNAL_IP/" /etc/mysql/my.cnf 
-fi
+sed -i "s/.*wsrep_provider_options =.*/wsrep_provider_options = 'gcache.size = 3G'/" /etc/mysql/my.cnf 
+# set the internal ip manually as otherwise the detection doesn't work   
+#sed -i "s/.*wsrep_node_address =.*/wsrep_node_address = $INTERNAL_IP/" /etc/mysql/my.cnf 
  
 if [ -n "${MYSQL_innodb_buffer_pool_size}" ]; then
     sed -i "s/.*innodb_buffer_pool_size =.*/innodb_buffer_pool_size = $MYSQL_innodb_buffer_pool_size/" /etc/mysql/my.cnf         
 fi
 
+# avoid race condition when mysql starts before the config file is closed
+sleep 1
 
 if [ "$1" = 'mysqld' ]; then
     # Get config
