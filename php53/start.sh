@@ -1,4 +1,4 @@
-#!/bin/bash
+ƒ#!/bin/bash
 fpmFile="/etc/php5/fpm/pool.d/www.conf"
 iniFile="/etc/php5/fpm/php.ini"
 env | sed "s/\(.*\)=\(.*\)/env[\1]='\2'/" >> $fpmFile
@@ -80,10 +80,10 @@ else
     sed -i -e "s/.*group =.*/group = nogroup/" $fpmFile
 fi
 ## when using LB lserver use memcached for sessions 
-if [ -n "${MEMCACHED_SERVER_LB}" ]; then
+if [ -n "${MEMCACHED_SERVER_second}" ]; then
     echo "memcache.session_redundancy=3" >> /etc/php5/conf.d/memcache.ini
     sed -i -e "s/.*session.save_handler =.*/session.save_handler = memcache/" $iniFile
-    sed -i -e "s/.*session.save_path =.*/session.save_path = \"tcp:\/\/$MEMCACHED_SERVER:11211?persistent=1\&weight=1\&timeout=1\&retry_interval=15\&status=false, tcp:\/\/$MEMCACHED_SERVER_LB:11211?persistent=1\&weight=1\&timeout=1\&retry_interval=15\&status=false\"/" $iniFile
+    sed -i -e "s/.*session.save_path =.*/session.save_path = \"tcp:\/\/$MEMCACHED_SERVER:11211?persistent=1\&weight=1\&timeout=1\&retry_interval=15\&status=false, tcp:\/\/$MEMCACHED_SERVER_second:11211?persistent=1\&weight=1\&timeout=1\&retry_interval=15\&status=false\"/" $iniFile
 fi
 
 ## process manager settings
