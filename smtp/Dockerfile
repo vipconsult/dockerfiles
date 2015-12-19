@@ -6,6 +6,6 @@ RUN apt-get install exim4 supervisor &&  \
         
 ADD update-exim4.conf.conf /etc/exim4/update-exim4.conf.conf
 ADD supervisord.conf /etc/supervisor/conf.d/
-ADD setup.sh setup.sh
+ADD entrypoint.sh /entrypoint.sh
 
 CMD ["/usr/bin/supervisord"]

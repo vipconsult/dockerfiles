@@ -1,4 +1,6 @@
-ƒ#!/bin/bash
+#!/bin/bash
+set -e
+
 fpmFile="/etc/php5/fpm/pool.d/www.conf"
 iniFile="/etc/php5/fpm/php.ini"
 env | sed "s/\(.*\)=\(.*\)/env[\1]='\2'/" >> $fpmFile
@@ -113,4 +115,4 @@ if [ -n "${PHP53_process_idle_timeout}" ]; then
     sed -i -e "s/.*pm.process_idle_timeout =.*/pm.process_idle_timeout = $PHP53_process_idle_timeout/" $fpmFile
 fi
 
-/usr/sbin/php5-fpm -c /etc/php5/fpm
+exec "$@"

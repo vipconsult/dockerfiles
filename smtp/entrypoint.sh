@@ -1,4 +1,8 @@
-#! /bin/bash
+#!/bin/bash
+set -e
+
+mkdir -p /var/spool/exim4
+chmod 777 -R /var/spool/exim4
 
 # run only the first time
 grep -q "remote_max_parallel=$SMTP_REMOTE_MAX_PARALLEL" /etc/exim4/exim4.conf.template || {
@@ -32,3 +36,6 @@ grep -q "remote_max_parallel=$SMTP_REMOTE_MAX_PARALLEL" /etc/exim4/exim4.conf.te
     update-exim4.conf
 }
 
+sleep 0.5;
+
+exec "$@"

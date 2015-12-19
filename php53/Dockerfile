@@ -30,6 +30,6 @@ RUN sed -i -e "s/^.*FromLineOverride.*$/FromLineOverride=YES/" /etc/ssmtp/ssmtp.
     sed -i -e "s/.*pm.status_path =.*/pm.status_path = \/status/" /etc/php5/fpm/pool.d/www.conf
 
 
-ADD start.sh start.sh
-
-CMD ["./start.sh"]
+ADD entrypoint.sh /entrypoint.sh
+ENTRYPOINT ["/entrypoint.sh"]
+CMD ["/usr/sbin/php5-fpm", "-c","/etc/php5/fpm"]
