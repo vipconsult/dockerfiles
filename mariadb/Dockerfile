@@ -1,7 +1,7 @@
 FROM vipconsult/base:jessie
 
 ENV MARIADB_MAJOR 10.1
-ENV MARIADB_VERSION 10.1.9+maria-1~jessie
+ENV MARIADB_VERSION 10.1.10+maria-1~jessie
 
 RUN apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 0xcbcb082a1bb943db && \
     echo "deb [arch=amd64,i386] http://ftp.cc.uoc.gr/mirrors/mariadb/repo/$MARIADB_MAJOR/debian jessie main"> /etc/apt/sources.list.d/mariadb.list &&\
@@ -40,7 +40,8 @@ RUN apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 0xcbcb082a1bb943db 
 
 
 # don't reverse lookup hostnames, they are usually another container
-RUN sed -i '/\[mysqld\]/ a skip-host-cache\nskip-name-resolve' /etc/mysql/my.cnf && \
+RUN sed -i '/\[mysqld\]/ a skip-host-cache\nskip-name-resolve\n#innodb_force_recovery =' /etc/mysql/my.cnf && \
+    sed -i "s/wait_timeout.*/wait_timeout = 7200/" /etc/mysql/my.cnf && \
     sed -i "/\[galera\]/ a \
         # these are added empty as they are replaces with env variables in the entry script
         wsrep_cluster_address = \n \

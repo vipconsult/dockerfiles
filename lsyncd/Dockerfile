@@ -27,6 +27,6 @@ RUN echo "StrictHostKeyChecking no" >>/etc/ssh/ssh_config
 
 
 ADD supervisord.conf /etc/supervisor/conf.d/
-ADD setup.sh setup.sh
-RUN chmod o+x setup.sh
+ADD entrypoint.sh /entrypoint.sh
+RUN chmod o+x /entrypoint.sh
 CMD ["/usr/bin/supervisord"]

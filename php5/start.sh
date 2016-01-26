@@ -70,6 +70,13 @@ else
     sed -i -e "s/.*date.timezone =.*/date.timezone = Europe\/London/" $iniFile
 fi
 
+# NOT USED ANYMORE AS IT ADD 1 SEC DELAY TO EVERY PAGE LOAD
+# if [ -n "${MEMCACHED_SERVER_second}" ]; then
+#     echo "memcache.session_redundancy=3" >> /etc/php5/conf.d/memcache.ini
+#     sed -i -e "s/.*session.save_handler =.*/session.save_handler = memcache/" $iniFile
+# #    sed -i -e "s/.*session.save_path =.*/session.save_path = \"tcp:\/\/$MEMCACHED_SERVER:11211?persistent=1\&weight=1\&timeout=1\&retry_interval=15\&status=false, tcp:\/\/$MEMCACHED_SERVER_second:11211?persistent=1\&weight=1\&timeout=1\&retry_interval=15\&status=false\"/" $iniFile
+#     sed -i -e "s/.*session.save_path =.*/session.save_path = \"tcp:\/\/$MEMCACHED_SERVER:11211\"/" $iniFile
+# fi
 
 ## process manager settings
 

@@ -5,7 +5,7 @@ mkdir -p /var/spool/exim4
 chmod 777 -R /var/spool/exim4
 
 # run only the first time
-grep -q "remote_max_parallel=$SMTP_REMOTE_MAX_PARALLEL" /etc/exim4/exim4.conf.template || {
+grep -q "remote_max_parallel=$SMTP_remote_max_parallel" /etc/exim4/exim4.conf.template || {
 
     # the mailname needs to be set as otherwise all server reject mails form non FQDN
     echo $DOMAINNAME > /etc/mailname
@@ -15,11 +15,15 @@ grep -q "remote_max_parallel=$SMTP_REMOTE_MAX_PARALLEL" /etc/exim4/exim4.conf.te
     #limit emails to prevent spam bots sending mass emails
     sed -i "/^.*\/usr\/sbin\/exim4/ a $SMTP_PROCESSING" /etc/exim4/exim4.conf.template
 
-    if [ -n "${SMTP_REMOTE_MAX_PARALLEL}" ]; then
-        sed -i "/^.*\/usr\/sbin\/exim4/ a remote_max_parallel=$SMTP_REMOTE_MAX_PARALLEL" /etc/exim4/exim4.conf.template
+    if [ -n "${SMTP_remote_max_parallel}" ]; then
+        sed -i "/^.*\/usr\/sbin\/exim4/ a remote_max_parallel=$SMTP_remote_max_parallel" /etc/exim4/exim4.conf.template
     fi
-    if [ -n "${SMTP_QUEUE_RUN_MAX}" ]; then
-        sed -i "/^.*\/usr\/sbin\/exim4/ a queue_run_max=$SMTP_QUEUE_RUN_MAX" /etc/exim4/exim4.conf.template
+    if [ -n "${SMTP_queue_run_max}" ]; then
+        sed -i "/^.*\/usr\/sbin\/exim4/ a queue_run_max=$SMTP_queue_run_max" /etc/exim4/exim4.conf.template
+    fi
+
+    if [ -n "${SMTP_timeout_frozen_after}" ]; then
+        sed -i -e "s/.*timeout_frozen_after.*/timeout_frozen_after=$SMTP_timeout_frozen_after/" /etc/exim4/exim4.conf.template
     fi
 
     sed -i -e "s/domainlist local_domains = MAIN_LOCAL_DOMAINS/domainlist local_domains =/g" /etc/exim4/exim4.conf.template  

@@ -81,12 +81,16 @@ if [ -n "${PHP53_group}" ]; then
 else
     sed -i -e "s/.*group =.*/group = nogroup/" $fpmFile
 fi
-## when using LB lserver use memcached for sessions 
-if [ -n "${MEMCACHED_SERVER_second}" ]; then
-    echo "memcache.session_redundancy=3" >> /etc/php5/conf.d/memcache.ini
-    sed -i -e "s/.*session.save_handler =.*/session.save_handler = memcache/" $iniFile
-    sed -i -e "s/.*session.save_path =.*/session.save_path = \"tcp:\/\/$MEMCACHED_SERVER:11211?persistent=1\&weight=1\&timeout=1\&retry_interval=15\&status=false, tcp:\/\/$MEMCACHED_SERVER_second:11211?persistent=1\&weight=1\&timeout=1\&retry_interval=15\&status=false\"/" $iniFile
-fi
+
+
+# NOT USED ANYMORE AS IT ADD 1 SEC DELAY TO EVERY PAGE LOAD
+# ## when using LB lserver use memcached for sessions 
+# if [ -n "${MEMCACHED_SERVER_second}" ]; then
+    # echo "memcache.session_redundancy=3" >> /etc/php5/conf.d/memcache.ini
+#     sed -i -e "s/.*session.save_handler =.*/session.save_handler = memcache/" $iniFile
+# #    sed -i -e "s/.*session.save_path =.*/session.save_path = \"tcp:\/\/$MEMCACHED_SERVER:11211?persistent=1\&weight=1\&timeout=1\&retry_interval=15\&status=false, tcp:\/\/$MEMCACHED_SERVER_second:11211?persistent=1\&weight=1\&timeout=1\&retry_interval=15\&status=false\"/" $iniFile
+#     sed -i -e "s/.*session.save_path =.*/session.save_path = \"tcp:\/\/$MEMCACHED_SERVER:11211\"/" $iniFile
+# fi
 
 ## process manager settings
 
@@ -114,5 +118,8 @@ fi
 if [ -n "${PHP53_process_idle_timeout}" ]; then
     sed -i -e "s/.*pm.process_idle_timeout =.*/pm.process_idle_timeout = $PHP53_process_idle_timeout/" $fpmFile
 fi
+
+#make sure /tmp is writable , avoids many problems !!
+chmod -R 777 /tmp
 
 exec "$@"
