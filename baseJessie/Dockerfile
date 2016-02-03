@@ -19,6 +19,7 @@ RUN echo 'APT::NeverAutoRemove "0";' >> /etc/apt/apt.conf.d/01usersetting && \
     apt-get update && \
     apt-get install \
         nano \
+        procps \
         wget && \
     apt-get autoremove
 

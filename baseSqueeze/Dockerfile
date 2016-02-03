@@ -19,9 +19,10 @@ RUN echo 'APT::NeverAutoRemove "0";' >> /etc/apt/apt.conf.d/01usersetting && \
     echo 'deb http://packages.dotdeb.org squeeze all' >> /etc/apt/sources.list && \
     echo 'deb-src http://packages.dotdeb.org squeeze all' >> /etc/apt/sources.list && \
     wget -O - http://www.dotdeb.org/dotdeb.gpg |apt-key add -  && \
-    
     apt-get update && \
-    apt-get install nano && \
+    apt-get install 
+    nano \
+    procps && \
     apt-get autoremove
 
 ONBUILD RUN apt-get update

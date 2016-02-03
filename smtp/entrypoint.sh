@@ -27,6 +27,7 @@ grep -q "remote_max_parallel=$SMTP_remote_max_parallel" /etc/exim4/exim4.conf.te
     fi
 
     sed -i -e "s/domainlist local_domains = MAIN_LOCAL_DOMAINS/domainlist local_domains =/g" /etc/exim4/exim4.conf.template  
+    sed -i -e "s/freeze_tell = /#freeze_tell =/g" /etc/exim4/exim4.conf.template  
     sed -i '/^.*\/usr\/sbin\/exim4/ a DKIM_CANON = relaxed' /etc/exim4/exim4.conf.template 
     sed -i '/^.*\/usr\/sbin\/exim4/ a DKIM_SELECTOR = default' /etc/exim4/exim4.conf.template 
     sed -i '/^.*\/usr\/sbin\/exim4/ a DKIM_PRIVATE_KEY = /var/spool/exim4/dkim.main.key' /etc/exim4/exim4.conf.template 
