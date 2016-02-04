@@ -61,5 +61,6 @@ RUN sed -i '/\[mysqld\]/ a skip-host-cache\nskip-name-resolve\n#innodb_force_rec
         " /etc/mysql/my.cnf
 
 COPY entrypoint.sh /
+RUN chmod 777 /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]
 CMD ["mysqld"]
