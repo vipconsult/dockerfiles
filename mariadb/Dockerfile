@@ -1,7 +1,7 @@
 FROM vipconsult/base:jessie
 
 ENV MARIADB_MAJOR 10.1
-ENV MARIADB_VERSION 10.1.10+maria-1~jessie
+ENV MARIADB_VERSION 10.1.11+maria-1~jessie
 
 RUN apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 0xcbcb082a1bb943db && \
     echo "deb [arch=amd64,i386] http://ftp.cc.uoc.gr/mirrors/mariadb/repo/$MARIADB_MAJOR/debian jessie main"> /etc/apt/sources.list.d/mariadb.list &&\
