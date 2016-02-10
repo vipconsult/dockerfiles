@@ -90,7 +90,6 @@ VOLUME ["/var/cache/nginx", "/var/cache/ngx_pagespeed"]
 EXPOSE 80 443
 ADD entrypoint.sh /
 RUN chmod 777 /entrypoint.sh \
-    && sed -i -e 's/\r$//' /entrypoint1.sh \
     && sed -i -e 's/\r$//' /entrypoint.sh
 
 ENTRYPOINT ["/entrypoint.sh"]
