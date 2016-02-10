@@ -20,6 +20,7 @@ RUN echo 'APT::NeverAutoRemove "0";' >> /etc/apt/apt.conf.d/01usersetting && \
     rm -rf /var/lib/apt/lists/* && apt-get clean
     
 ADD supervisord.conf /etc/supervisor/conf.d/
-ADD setup.sh setup.sh
-RUN chmod u+x /setup.sh
+ADD entrypoint.sh entrypoint.sh
+RUN chmod u+x /entrypoint.sh  \
+    && sed -i -e 's/\r$//' /entrypoint.sh
 CMD /usr/bin/supervisord

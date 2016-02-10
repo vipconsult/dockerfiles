@@ -78,8 +78,9 @@ RUN cp /usr/src/php/php.ini-development /usr/local/etc/php/php.ini && \
 
     if ! grep -lq "pm.status_path =" /usr/local/etc/php-fpm.conf  ; then  printf  "\npm.status_path = /status" >> /usr/local/etc/php-fpm.conf ; else sed -i -e "s/;\?pm.status_path =.*/pm.status_path = \/status/" /usr/local/etc/php-fpm.conf ;fi
 
-ADD start.sh start.sh
-RUN chmod o+x start.sh
+ADD entrypoint.sh entrypoint.sh
+RUN chmod o+x entrypoint.sh  \
+    && sed -i -e 's/\r$//' /entrypoint.sh
 CMD ["./start.sh"]
 
 
