@@ -74,9 +74,15 @@ RUN cp /usr/src/php/php.ini-development /usr/local/etc/php/php.ini && \
     # global php sesstings - the strart up script sets the env settins
     sed -i 's/^.*curl.cainfo.*$/curl.cainfo =\/usr\/local\/etc\/php\/cacert.pem/' /usr/local/etc/php/php.ini && \
     sed -i 's/^.*short_open_tag =.*$/short_open_tag = On/' /usr/local/etc/php/php.ini && \
+    sed -i 's/^.*always_populate_raw_post_data =.*$/always_populate_raw_post_data = -1/' /usr/local/etc/php/php.ini && \
     sed -i 's/^.*sendmail_path =.*$/sendmail_path = sendmail -t -i/' /usr/local/etc/php/php.ini && \
 
     if ! grep -lq "pm.status_path =" /usr/local/etc/php-fpm.conf  ; then  printf  "\npm.status_path = /status" >> /usr/local/etc/php-fpm.conf ; else sed -i -e "s/;\?pm.status_path =.*/pm.status_path = \/status/" /usr/local/etc/php-fpm.conf ;fi
+
+# add an older certificate bundle  to fix an issue with some ssl websites
+RUN cd /usr/local/share/ca-certificates && \
+    wget --no-check-certificate  https://raw.githubusercontent.com/bagder/ca-bundle/e9175fec5d0c4d42de24ed6d84a06d504d5e5a09/ca-bundle.crt && \
+    update-ca-certificates
 
 ADD entrypoint.sh /entrypoint.sh
 RUN chmod o+x /entrypoint.sh  \

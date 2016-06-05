@@ -6,9 +6,13 @@ chmod 777 -R /var/spool/exim4
 
 # run only the first time
 grep -q "remote_max_parallel=$SMTP_remote_max_parallel" /etc/exim4/exim4.conf.template || {
-
     # the mailname needs to be set as otherwise all server reject mails form non FQDN
     echo $DOMAINNAME > /etc/mailname
+
+
+    sed -i -e "s/.*rfc1413_hosts =.*/rfc1413_hosts =/" /etc/exim4/exim4.conf.template
+    sed -i -e "s/.*rfc1413_query_timeout =.*/rfc1413_query_timeout = 0s/" /etc/exim4/exim4.conf.template
+    sed -i -e "s/.*dc_minimaldns=.*/dc_minimaldns='true'/" /etc/exim4/update-exim4.conf.conf
 
     # these are set here because the debian reconfig doesn't support them
 
@@ -37,8 +41,17 @@ grep -q "remote_max_parallel=$SMTP_remote_max_parallel" /etc/exim4/exim4.conf.te
     sed -i "/^.*acl_check_rcpt:/ a accept control = submission/sender_retain" /etc/exim4/exim4.conf.template
     ## google postmaster tools - sends reports
     sed -i "/^.*remote_smtp:/ a headers_add = Feedback-ID: CampaignIDX:$DOMAINNAME:MailTypeID3:$DOMAINNAME" /etc/exim4/exim4.conf.template
-    update-exim4.conf
+    
 }
+
+# remove all acl rules to speed up the sending
+rm -R /etc/exim4/conf.d/acl/*
+echo "acl_check_rcpt: "> /etc/exim4/conf.d/acl/30_exim4-config_check_rcpt
+echo "  accept" >> /etc/exim4/conf.d/acl/30_exim4-config_check_rcpt
+echo "  control = dkim_disable_verify" >> /etc/exim4/conf.d/acl/30_exim4-config_check_rcpt
+
+update-exim4.conf
+
 
 sleep 0.5;
 

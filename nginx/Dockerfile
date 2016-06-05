@@ -4,11 +4,11 @@ MAINTAINER Krasimir Georgiev <support@vip-consult.co.uk>
 # Version
 ENV NGINX_VERSION 1.8.0
 ENV NPS_VERSION 1.9.32.10
-ENV OPENSSL_VERSION 1.0.2f
+ENV OPENSSL_VERSION 1.0.2g
 
 # Install Build Tools & Dependence
 
-RUN apt-get install autotools-dev zlib1g-dev libpcre3 libpcre3-dev && \
+RUN apt-get update && apt-get install autotools-dev zlib1g-dev libpcre3 libpcre3-dev && \
     apt-get build-dep nginx-full && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*

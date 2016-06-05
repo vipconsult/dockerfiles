@@ -129,4 +129,7 @@ if [ -n "${PHP5_process_idle_timeout}" ]; then
     sed -i -e "s/.*pm.process_idle_timeout =.*/pm.process_idle_timeout = $PHP5_process_idle_timeout/" $fpmFile
 fi
 
+#make sure /tmp is writable , avoids many problems !!
+chmod -R 777 /tmp
+
 php-fpm
