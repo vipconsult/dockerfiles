@@ -28,9 +28,9 @@ RUN echo 'APT::NeverAutoRemove "0";' >> /etc/apt/apt.conf.d/01usersetting && \
     apt-get clean && \
     apt-get purge git make file build-essential && \
     apt-get autoremove
-ADD bacula-dir.conf /tmp/
-ADD bacula-sd.conf /tmp/
-ADD bconsole.conf /tmp/
+#ADD bacula-dir.conf /tmp/
+#ADD bacula-sd.conf /tmp/
+#ADD bconsole.conf /tmp/
 ADD run.sh /tmp/  
 RUN chmod o+x /tmp/run.sh  \
     && sed -i -e 's/\r$//' /tmp/run.sh
