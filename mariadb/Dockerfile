@@ -1,7 +1,7 @@
 FROM vipconsult/base:jessie
 
 ENV MARIADB_MAJOR 10.1
-ENV MARIADB_VERSION 10.1.13+maria-1~jessie
+ENV MARIADB_VERSION 10.1.14+maria-1~jessie
 
 RUN apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 0xcbcb082a1bb943db && \
     echo "deb [arch=amd64,i386] http://ftp.cc.uoc.gr/mirrors/mariadb/repo/$MARIADB_MAJOR/debian jessie main"> /etc/apt/sources.list.d/mariadb.list &&\
@@ -25,16 +25,17 @@ RUN apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 0xcbcb082a1bb943db 
     apt-get install \
         socat \
         libcurl3 \
+        libnuma1 \
         libev4 && \
-    wget --no-check-certificate  https://www.percona.com/downloads/XtraBackup/Percona-XtraBackup-2.3.2/binary/debian/jessie/x86_64/percona-xtrabackup_2.3.2-1.jessie_amd64.deb && \
-    dpkg -i percona-xtrabackup_2.3.2-1.jessie_amd64.deb && \
+    wget --no-check-certificate  https://www.percona.com/downloads/XtraBackup/Percona-XtraBackup-2.4.3/binary/debian/jessie/x86_64/percona-xtrabackup-24_2.4.3-1.jessie_amd64.deb && \
+    dpkg -i percona-xtrabackup-24_2.4.3-1.jessie_amd64.deb && \
 
     #install the backup compress utility
     wget --no-check-certificate  http://www.quicklz.com/qpress-11-linux-x64.tar && \
     tar xvf qpress-11-linux-x64.tar && \
     mv qpress /usr/bin/qpress && \
     rm qpress-11-linux-x64.tar && \
-    rm percona-xtrabackup_2.3.2-1.jessie_amd64.deb && \
+    rm percona-xtrabackup-24_2.4.3-1.jessie_amd64.deb && \
     rm -rf /var/lib/mysql && \
 	rm -rf /var/lib/apt/lists/*
 

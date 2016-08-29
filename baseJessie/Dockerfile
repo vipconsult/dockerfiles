@@ -17,6 +17,7 @@ RUN echo 'APT::NeverAutoRemove "0";' >> /etc/apt/apt.conf.d/01usersetting && \
             >> /etc/apt/sources.list && \
     
     apt-get update && \
+    apt-get upgrade && \
     apt-get install \
         nano \
         procps \

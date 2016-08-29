@@ -2,14 +2,13 @@ FROM vipconsult/base:jessie
 MAINTAINER Krasimir Georgiev <support@vip-consult.co.uk>
 
 # Version
-ENV NGINX_VERSION 1.8.0
-ENV NPS_VERSION 1.9.32.10
-ENV OPENSSL_VERSION 1.0.2g
-
+ENV NGINX_VERSION 1.11.3
+ENV NPS_VERSION 1.11.33.3
+ENV OPENSSL_VERSION 1.0.2h
 # Install Build Tools & Dependence
 
-RUN apt-get update && apt-get install autotools-dev zlib1g-dev libpcre3 libpcre3-dev && \
-    apt-get build-dep nginx-full && \
+RUN apt-get install autotools-dev zlib1g-dev libpcre3 libpcre3-dev && \
+    apt-get build-dep nginx && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
@@ -57,13 +56,13 @@ RUN cd /usr/src && \
     --user=nobody --group=nogroup \
     --with-http_dav_module \
     --with-http_ssl_module \
+    --with-http_v2_module \
     --with-http_realip_module \
     --with-http_flv_module \
     --with-http_mp4_module \
     --with-http_gunzip_module \
     --with-http_gzip_static_module \
     --with-http_secure_link_module \
-    --with-http_spdy_module \
     --with-http_auth_request_module \
     --with-file-aio \
     --with-cc-opt='-g -O2 -fstack-protector --param=ssp-buffer-size=4 -Wformat -Werror=format-security -Wp,-D_FORTIFY_SOURCE=2' --with-ld-opt='-Wl,-z,relro -Wl,--as-needed' \

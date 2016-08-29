@@ -11,9 +11,9 @@ RUN apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 0xcbcb082a1bb943db 
 		echo 'Pin: release o=MariaDB'; \
 		echo 'Pin-Priority: 999'; \
 	} > /etc/apt/preferences.d/mariadb && \
-        apt-get update && \
+    apt-get update && \
 	apt-get install \
-            galera-arbitrator-3 && \
+    	galera-arbitrator-3 && \
 	rm -rf /var/lib/mysql && \
 	rm -rf /var/lib/apt/lists/*
 CMD ["bash", "-c", "garbd -a gcomm://$MYSQL_CLUSTER?pc.wait_prim=no -g my_wsrep_cluster"]

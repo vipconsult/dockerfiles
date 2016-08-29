@@ -1,15 +1,14 @@
 FROM vipconsult/base:jessie
 MAINTAINER Krasimir Georgiev <support@vip-consult.co.uk>
 
-RUN apt-get update && apt-get install -y curl ca-certificates
+RUN apt-get install -y curl ca-certificates
 RUN curl https://files.freeswitch.org/repo/deb/debian/freeswitch_archive_g0.pub | apt-key add - 
 RUN echo "deb http://files.freeswitch.org/repo/deb/freeswitch-1.6/ jessie main" > /etc/apt/sources.list.d/freeswitch.list && \
     apt-get update
-RUN apt-get install -y --force-yes freeswitch-video-deps-most 
-RUN apt-get install -y --force-yes \
-        libpq-dev \
-        odbc-postgresql \
-        libspeex-dev
+RUN apt-get install freeswitch-video-deps-most 
+RUN apt-get install \
+            libpq-dev \
+            libspeex-dev
 
 
         #apt-get install -y --no-install-recommends \
@@ -19,6 +18,8 @@ RUN apt-get install -y --force-yes \
         #libcurl4-openssl-dev libpcre3-dev libspeex-dev libspeexdsp-dev libsqlite3-dev \
         #libedit-dev libldns-dev libpq-dev \
         # install odbc support 
+                # odbc-postgresql \
+
     
 # because we're in a branch that will go through many rebases it's
 # better to set this one, or you'll get CONFLICTS when pulling (update) 
@@ -34,7 +35,7 @@ RUN ./bootstrap.sh -j
 ADD ./modules.conf modules.conf
 
 
-RUN ./configure --enable-core-pgsql-support
+RUN ./configure --enable-core-pgsql-support --enable-zrtp
 
 RUN make && make install && \
 

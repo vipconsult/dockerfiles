@@ -3,7 +3,9 @@ set -e
 
 fpmFile="/etc/php5/fpm/pool.d/www.conf"
 iniFile="/etc/php5/fpm/php.ini"
-env | sed "s/\(.*\)=\(.*\)/env[\1]='\2'/" >> $fpmFile
+
+# echo the env -> remove all ' and "  , don't add the crontaks and any password variables as these are not needed in the php container
+env | sed -e 's|["'\'']||g' | grep -v "CRONTASK" | grep -vi "pass" | sed "s/\(.*\)=\(.*\)/env[\1]='\2'/" >> $fpmFile
 
 sed -i -e "s/^.*mailhub=.*$/mailhub=$SMTP_SERVER/" /etc/ssmtp/ssmtp.conf
 
