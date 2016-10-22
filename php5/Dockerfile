@@ -19,10 +19,11 @@ RUN echo 'APT::NeverAutoRemove "0";' >> /etc/apt/apt.conf.d/01usersetting && \
         docker-php-ext-install gd && \
     ## imagick
     apt-get install libmagickwand-dev && \
-        curl -L https://pecl.php.net/get/imagick-3.3.0RC2.tgz >> /usr/src/php/ext/imagick.tgz && \
+        mkdir -p /usr/src/php/ext && curl -L https://pecl.php.net/get/imagick >> /usr/src/php/ext/imagick.tgz && \
         tar -xf /usr/src/php/ext/imagick.tgz -C /usr/src/php/ext/ && \
         rm /usr/src/php/ext/imagick.tgz && \
-        docker-php-ext-install imagick-3.3.0RC2 && \
+        mv -T /usr/src/php/ext/imagick* /usr/src/php/ext/imagick && \
+        docker-php-ext-install imagick && \
         docker-php-ext-install mysql && \
         docker-php-ext-install mysqli && \
     apt-get install libcurl4-openssl-dev && \
@@ -52,11 +53,12 @@ RUN echo 'APT::NeverAutoRemove "0";' >> /etc/apt/apt.conf.d/01usersetting && \
         sed -i "s/^.*FromLineOverride.*$/FromLineOverride=YES/" /etc/ssmtp/ssmtp.conf && \
         #memcached
     apt-get install \
-        php-pear curl zlib1g-dev libncurses5-dev && \
-        curl -L http://pecl.php.net/get/memcache-2.2.7.tgz >> /usr/src/php/ext/memcache.tgz && \
+        php-pear curl zlib1g-dev libncurses5-dev libmemcached-dev && \
+        curl -L https://pecl.php.net/get/memcached >> /usr/src/php/ext/memcache.tgz && \
         tar -xf /usr/src/php/ext/memcache.tgz -C /usr/src/php/ext/ && \
         rm /usr/src/php/ext/memcache.tgz && \
-        docker-php-ext-install memcache-2.2.7 && \
+        mv -T /usr/src/php/ext/memcache* /usr/src/php/ext/memcache && \
+        docker-php-ext-install memcache && \
 
     apt-get purge -y --auto-remove && \
         rm -rf /var/lib/apt/lists/* && \

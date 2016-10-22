@@ -10,7 +10,7 @@ RUN apt-get install locales && \
     echo "en_GB.UTF-8 UTF-8" >> /etc/locale.gen && \
     locale-gen
 
-RUN apt-get install postgresql-client-9.3 && \
+RUN apt-get install postgresql-client-9.6 && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
