@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<virtualHostConfig>
+  <docRoot>$SERVER_ROOT/DEFAULT/html/public/</docRoot>
+  <scriptHandlerList>
+    <scriptHandler>
+      <suffix>php</suffix>
+      <type>lsapi</type>
+      <handler>php</handler>
+    </scriptHandler>
+    <scriptHandler>
+      <suffix>php5</suffix>
+      <type>lsapi</type>
+      <handler>php</handler>
+    </scriptHandler>
+    <scriptHandler>
+      <suffix>php56</suffix>
+      <type>lsapi</type>
+      <handler>php</handler>
+    </scriptHandler>
+  </scriptHandlerList>
+  <htAccess>
+    <allowOverride>31</allowOverride>
+    <accessFileName>.htaccess</accessFileName>
+  </htAccess>
+  <extProcessorList>
+    <extProcessor>
+      <type>lsapi</type>
+      <name>php</name>
+      <address>lsphp56:7777</address>
+      <maxConns>5</maxConns>
+      <initTimeout>180</initTimeout>
+      <retryTimeout>0</retryTimeout>
+      <pcKeepAliveTimeout>30</pcKeepAliveTimeout>
+      <respBuffer>0</respBuffer>
+      <autoStart>0</autoStart>
+      <backlog>10</backlog>
+      <instances>5</instances>
+      <extMaxIdleTime>60</extMaxIdleTime>
+      <priority>0</priority>
+      <memSoftLimit>500M</memSoftLimit>
+      <memHardLimit>500M</memHardLimit>
+      <procSoftLimit>100</procSoftLimit>
+      <procHardLimit>200</procHardLimit>
+    </extProcessor>
+  </extProcessorList>
+</virtualHostConfig>

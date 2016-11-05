@@ -1,0 +1,1 @@
+PHP_LSAPI_MAX_REQUESTS=500 PHP_LSAPI_CHILDREN=35 /usr/local/bin/lsphp -b *:7777
