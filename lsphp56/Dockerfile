@@ -23,7 +23,7 @@ libxslt-dev \
 libssl-dev \
 pkg-config \
 libc-client2007e-dev \
-libkrb5-dev        #da moje se compilira php i da startira instalaciqta na litespeed
+libkrb5-dev        #required to configure php 
 RUN wget http://uk1.php.net/get/php-5.6.27.tar.gz/from/this/mirror -O /home/php/php-5.6.27.tar.gz
 RUN tar -zxvf /home/php/php-5.6.27.tar.gz -C /home/php/
 RUN bash /home/php/php-5.6.27/configure \
@@ -55,7 +55,6 @@ RUN bash /home/php/php-5.6.27/configure \
 '--with-zlib' \
 '--with-litespeed'
 
-#RUN ./configure 
 #--with-mysql-sock=/var/lib/mysql/mysql.sock 
 RUN make
 RUN make install
