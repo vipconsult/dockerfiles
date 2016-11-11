@@ -2,15 +2,21 @@
 <httpServerConfig>
   <serverName>$HOSTNAME</serverName>
   <user>nobody</user>
-  <group>nogroup</group>
+  <group>nobody</group>
   <priority>0</priority>
   <chrootPath>/</chrootPath>
   <enableChroot>0</enableChroot>
-  <inMemBufSize>120M</inMemBufSize>
+  <inMemBufSize>60M</inMemBufSize>
   <swappingDir>/tmp/lshttpd/swap</swappingDir>
   <autoFix503>1</autoFix503>
   <loadApacheConf>0</loadApacheConf>
+  <autoReloadApacheConf>0</autoReloadApacheConf>
+  <apachePortOffset>0</apachePortOffset>
+  <apacheIpOffset>0</apacheIpOffset>
+  <phpSuExec>2</phpSuExec>
+  <phpSuExecMaxConn>10</phpSuExecMaxConn>
   <mime>$SERVER_ROOT/conf/mime.properties</mime>
+  <disableInitLogRotation>1</disableInitLogRotation>
   <showVersionNumber>0</showVersionNumber>
   <autoUpdateInterval>86400</autoUpdateInterval>
   <autoUpdateDownloadPkg>1</autoUpdateDownloadPkg>
@@ -18,22 +24,23 @@
   <adminRoot>$SERVER_ROOT/admin/</adminRoot>
   <logging>
     <log>
-      <fileName>$SERVER_ROOT/logs/error.log</fileName>
+      <fileName>$SERVER_ROOT/logs/error_log</fileName>
       <logLevel>DEBUG</logLevel>
       <debugLevel>0</debugLevel>
-      <rollingSize>10M</rollingSize>
+      <rollingSize>2000M</rollingSize>
       <enableStderrLog>1</enableStderrLog>
+      <enableAioLog>1</enableAioLog>
     </log>
     <accessLog>
       <fileName>$SERVER_ROOT/logs/access.log</fileName>
-      <rollingSize>10M</rollingSize>
+      <rollingSize>2000M</rollingSize>
       <keepDays>30</keepDays>
       <compressArchive>0</compressArchive>
     </accessLog>
   </logging>
-  <indexFiles>index.html, index.php</indexFiles>
+  <indexFiles>index.html, index.php, index.htm</indexFiles>
   <htAccess>
-    <allowOverride>0</allowOverride>
+    <allowOverride>31</allowOverride>
     <accessFileName>.htaccess</accessFileName>
   </htAccess>
   <expires>
@@ -44,11 +51,11 @@
     <eventDispatcher>best</eventDispatcher>
     <SSLCryptoDevice>null</SSLCryptoDevice>
     <maxConnections>2000</maxConnections>
-    <maxSSLConnections>200</maxSSLConnections>
-    <connTimeout>300</connTimeout>
+    <maxSSLConnections>500</maxSSLConnections>
+    <connTimeout>120</connTimeout>
     <maxKeepAliveReq>1000</maxKeepAliveReq>
-    <smartKeepAlive>0</smartKeepAlive>
-    <keepAliveTimeout>5</keepAliveTimeout>
+    <smartKeepAlive>1</smartKeepAlive>
+    <keepAliveTimeout>10</keepAliveTimeout>
     <sndBufSize>0</sndBufSize>
     <rcvBufSize>0</rcvBufSize>
     <maxReqURLLen>8192</maxReqURLLen>
@@ -66,9 +73,9 @@
     <enableGzipCompress>1</enableGzipCompress>
     <enableDynGzipCompress>1</enableDynGzipCompress>
     <gzipCompressLevel>1</gzipCompressLevel>
-    <compressibleTypes>text/*,application/x-javascript,application/javascript,application/xml, image/svg+xml</compressibleTypes>
+    <compressibleTypes>text/*, application/x-javascript, application/xml, application/javascript, image/svg+xml</compressibleTypes>
     <gzipAutoUpdateStatic>1</gzipAutoUpdateStatic>
-    <gzipStaticCompressLevel>6</gzipStaticCompressLevel>
+    <gzipStaticCompressLevel>1</gzipStaticCompressLevel>
     <gzipMaxFileSize>1M</gzipMaxFileSize>
     <gzipMinFileSize>300</gzipMinFileSize>
   </tuning>
@@ -76,8 +83,11 @@
     <fileAccessControl>
       <followSymbolLink>1</followSymbolLink>
       <checkSymbolLink>0</checkSymbolLink>
+      <forceStrictOwnership>1</forceStrictOwnership>
       <requiredPermissionMask>000</requiredPermissionMask>
       <restrictedPermissionMask>000</restrictedPermissionMask>
+      <restrictedScriptPermissionMask>000</restrictedScriptPermissionMask>
+      <restrictedDirPermissionMask>000</restrictedDirPermissionMask>
     </fileAccessControl>
     <perClientConnLimit>
       <staticReqPerSec>0</staticReqPerSec>
@@ -94,12 +104,12 @@
       <minUID>11</minUID>
       <minGID>10</minGID>
       <priority>0</priority>
-      <CPUSoftLimit>300</CPUSoftLimit>
-      <CPUHardLimit>600</CPUHardLimit>
+      <CPUSoftLimit>60</CPUSoftLimit>
+      <CPUHardLimit>120</CPUHardLimit>
       <memSoftLimit>1450M</memSoftLimit>
       <memHardLimit>1500M</memHardLimit>
-      <procSoftLimit>1400</procSoftLimit>
-      <procHardLimit>1450</procHardLimit>
+      <procSoftLimit>400</procSoftLimit>
+      <procHardLimit>450</procHardLimit>
     </CGIRLimit>
     <censorshipControl>
       <enableCensorship>0</enableCensorship>
@@ -107,36 +117,6 @@
       <defaultAction>deny,log,status:403</defaultAction>
       <scanPOST>1</scanPOST>
     </censorshipControl>
-    <censorshipRuleSet>
-      <name>XSS attack</name>
-      <ruleSetAction>log,deny,status:403,msg:'XSS attack'</ruleSetAction>
-      <enabled>1</enabled>
-      <ruleSet>SecFilterSelective ARGS &quot;(alert|expression|eval|url)[[:space:]]*\(&quot;
-SecFilterSelective ARGS &quot;(&amp;\{.+\}|(&amp;#[[0-9a-fA-F]]|\x5cx[0-9a-fA-F]){2})&quot;
-
-SecFilterSelective ARGS &quot;((javascript|vbscript):|style[[:space:]]*=)&quot;
-SecFilterSelective ARGS &quot;(fromCharCode|http-equiv|&lt;.+&gt;|innerHTML|dynsrc|--&gt;)&quot;
-SecFilterSelective ARGS &quot;document\.(body|cookie|location|write)&quot;
-
-SecFilterSelective ARGS_VALUES &quot;jsessionid|phpsessid|onReadyStateChange|xmlHttp&quot;
-
-SecFilterSelective ARGS &quot;&lt;(applet|div|embed|iframe|img|meta|object|script|textarea)&quot;
-
-# JavaScript event handlers
-SecFilterSelective ARGS &quot;on(Abort|Blur|Click|DblClick|DragDrop|Error|Focus|KeyUp|KeyDown|KeyPrerss|Load|Mouse(Down|Out|Over|Up)|Move|Reset|Resize|Select|Submit|Unload)&quot;</ruleSet>
-    </censorshipRuleSet>
-    <censorshipRuleSet>
-      <name>SQL injection</name>
-      <ruleSetAction>log,pass,msg:'SQL Injection attack'</ruleSetAction>
-      <enabled>1</enabled>
-      <ruleSet>#SQL generic
-SecFilterSelective ARGS &quot;drop[[:space:]]+(database|table|column|procedure)&quot;
-SecFilterSelective ARGS &quot;delete[[:space:]]+from|create[[:space:]]+table|update.+set.+=|insert[[:space:]]+into.+values&quot;
-SecFilterSelective ARGS &quot;select.+from|bulk[[:space:]]+insert|union.+select|alter[[:space:]]+table&quot;
-SecFilterSelective ARGS &quot;or.+1[[:space:]]*=[[:space:]]1|or 1=1--'|'.+--&quot;
-
-SecFilterSelective ARGS &quot;into[[:space:]]+outfile|load[[:space:]]+data|/\*.+\*/&quot;</ruleSet>
-    </censorshipRuleSet>
     <accessDenyDir>
       <dir>/</dir>
       <dir>/etc/*</dir>
@@ -148,17 +128,54 @@ SecFilterSelective ARGS &quot;into[[:space:]]+outfile|load[[:space:]]+data|/\*.+
       <allow>ALL</allow>
     </accessControl>
   </security>
+  <extProcessorList>
+    <extProcessor>
+      <type>lsapi</type>
+      <name>lsphp5</name>
+      <address>uds://tmp/lshttpd/lsphp5.sock</address>
+      <maxConns>35</maxConns>
+      <env>PHP_LSAPI_MAX_REQUESTS=5000</env>
+      <env>PHP_LSAPI_CHILDREN=35</env>
+      <initTimeout>60</initTimeout>
+      <retryTimeout>0</retryTimeout>
+      <persistConn>1</persistConn>
+      <respBuffer>0</respBuffer>
+      <autoStart>3</autoStart>
+      <path>/usr/local/bin/lsphp</path>
+      <backlog>100</backlog>
+      <instances>1</instances>
+      <extMaxIdleTime>10</extMaxIdleTime>
+      <priority>0</priority>
+      <memSoftLimit>2047M</memSoftLimit>
+      <memHardLimit>2047M</memHardLimit>
+      <procSoftLimit>400</procSoftLimit>
+      <procHardLimit>500</procHardLimit>
+    </extProcessor>
+  </extProcessorList>
+  <scriptHandlerList>
+    <scriptHandler>
+      <suffix>php</suffix>
+      <type>lsapi</type>
+      <handler>lsphp5</handler>
+    </scriptHandler>
+    <scriptHandler>
+      <suffix>php5</suffix>
+      <type>lsapi</type>
+      <handler>lsphp5</handler>
+    </scriptHandler>
+  </scriptHandlerList>
   <railsDefaults>
     <railsEnv>1</railsEnv>
     <maxConns>5</maxConns>
     <env>LSAPI_MAX_REQS=1000</env>
     <env>LSAPI_MAX_IDLE=60</env>
-    <initTimeout>180</initTimeout>
+    <initTimeout>60</initTimeout>
     <retryTimeout>0</retryTimeout>
     <pcKeepAliveTimeout>60</pcKeepAliveTimeout>
     <respBuffer>0</respBuffer>
     <backlog>50</backlog>
     <runOnStartUp>1</runOnStartUp>
+    <extMaxIdleTime>300</extMaxIdleTime>
     <priority>3</priority>
     <memSoftLimit>2047M</memSoftLimit>
     <memHardLimit>2047M</memHardLimit>
@@ -167,14 +184,13 @@ SecFilterSelective ARGS &quot;into[[:space:]]+outfile|load[[:space:]]+data|/\*.+
   </railsDefaults>
   <virtualHostList>
     <virtualHost>
-      <name>Example</name>
+      <name>CapitalNetwork</name>
       <vhRoot>$SERVER_ROOT/DEFAULT/</vhRoot>
       <configFile>$SERVER_ROOT/conf/capitalnetwork.xml</configFile>
       <allowSymbolLink>1</allowSymbolLink>
       <enableScript>1</enableScript>
-      <restrained>1</restrained>
+      <restrained>0</restrained>
       <setUIDMode>0</setUIDMode>
-      <chrootMode>0</chrootMode>
     </virtualHost>
   </virtualHostList>
   <listenerList>
@@ -182,29 +198,6 @@ SecFilterSelective ARGS &quot;into[[:space:]]+outfile|load[[:space:]]+data|/\*.+
       <name>Default</name>
       <address>*:80</address>
       <secure>0</secure>
-      <vhostMapList>
-        <vhostMap>
-          <vhost>Example</vhost>
-          <domain>*</domain>
-        </vhostMap>
-      </vhostMapList>
     </listener>
   </listenerList>
-  <vhTemplateList>
-    <vhTemplate>
-      <name>centralConfigLog</name>
-      <templateFile>$SERVER_ROOT/conf/templates/ccl.xml</templateFile>
-      <listeners>Default</listeners>
-    </vhTemplate>
-    <vhTemplate>
-      <name>PHP_SuEXEC</name>
-      <templateFile>$SERVER_ROOT/conf/templates/phpsuexec.xml</templateFile>
-      <listeners>Default</listeners>
-    </vhTemplate>
-    <vhTemplate>
-      <name>EasyRailsWithSuEXEC</name>
-      <templateFile>$SERVER_ROOT/conf/templates/rails.xml</templateFile>
-      <listeners>Default</listeners>
-    </vhTemplate>
-  </vhTemplateList>
 </httpServerConfig>

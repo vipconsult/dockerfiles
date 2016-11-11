@@ -84,15 +84,8 @@ install_dir()
     TMP_DEST=$DEST_RECOM
     LSWS_HOME=$TMP_DEST
 
-
-#   $TEST_BIN ! -L "$LSWS_HOME/bin/lswsctrl"
-#        if [ $? -eq 0 ]; then
    INSTALL_TYPE="upgrade"
    SET_LOGIN=0
-#        else
-#   INSTALL_TYPE="reinstall"
-#   SET_LOGIN=1
-#        fi
     export LSWS_HOME
 
     if [ -f "$LSWS_HOME/conf/httpd_config.xml" ]; then
@@ -212,26 +205,9 @@ enablePHPHandler()
 
 buildApConfigFiles()
 {
-#sed -e "s/%ADMIN_PORT%/$ADMIN_PORT/" -e "s/%PHP_FCGI_PORT%/$ADMIN_PHP_PORT/" "$LSINSTALL_DIR/admin/conf/admin_config.xml.in" > "$LSINSTALL_DIR/admin/conf/admin_config.xml"
-
     sed -e "s/%ADMIN_PORT%/$ADMIN_PORT/" "$LSINSTALL_DIR/admin/conf/admin_config.xml.in" > "$LSINSTALL_DIR/admin/conf/admin_config.xml"
-
     sed -e "s/%USER%/$WS_USER/" -e "s/%GROUP%/$WS_GROUP/" -e "s#%APACHE_PID_FILE%#$APACHE_PID_FILE#" -e "s/%ADMIN_EMAIL%/$ADMIN_EMAIL/" -e "s#%RUBY_BIN%#$RUBY_PATH#" -e "s/%SERVER_NAME%/$SERVER_NAME/" -e "s/%AP_PORT_OFFSET%/$AP_PORT_OFFSET/" -e "s/%PHP_SUEXEC%/$PHP_SUEXEC/" "$LSINSTALL_DIR/add-ons/$HOST_PANEL/httpd_config.xml${PANEL_VARY}" > "$LSINSTALL_DIR/conf/httpd_config.xml"
-
 }
-
-cPanelSwitchPathsConf()
-{
-    mode=shift
-    if [ "x$mode" == 'xapache' ]; then
-        cp /etc/cpanel/ea4/paths.conf /etc/cpanel/ea4/paths.conf.tmp
-        sed -e 's#/usr/local/lsws/bin/lswsctrl#/usr/sbin/apachectl#' </etc/cpanel/ea4/paths.conf.tmp >/etc/cpanel/ea4/paths.conf
-    else
-        cp /etc/cpanel/ea4/paths.conf /etc/cpanel/ea4/paths.conf.tmp
-        sed -e 's#/usr/sbin/apachectl#/usr/local/lsws/bin/lswsctrl#' </etc/cpanel/ea4/paths.conf.tmp >/etc/cpanel/ea4/paths.conf
-    fi
-}
-
 
 # generate configuration from template
 
@@ -312,7 +288,6 @@ util_cpdir()
       do
       cp -R "$LSINSTALL_DIR/$arg/"* "$LSWS_HOME/$arg/"
       chown -R "$OWNER" "$LSWS_HOME/$arg/"*
-      #chmod -R $PERM  $LSWS_HOME/$arg/*
     done
 }
 
@@ -336,7 +311,6 @@ util_cpdirv()
       fi
       FILENAME=`basename $arg`
       ln -sf "./$FILENAME.$VERSION/" "$LSWS_HOME/$arg"
-              #chmod -R $PERM  $LSWS_HOME/$arg/*
     done
 }
 
@@ -459,15 +433,6 @@ compress_admin_file()
 }
 
 
-install_whm_plugin()
-{
-
-    WHM_PLUGIN_SRCDIR="$LSINSTALL_DIR/add-ons/cpanel/lsws_whm_plugin"
-    $WHM_PLUGIN_SRCDIR/lsws_whm_plugin_install.sh  $WHM_PLUGIN_SRCDIR  $LSWS_HOME
-
-
-}
-
 create_lsadm_freebsd()
 {
     pw group add lsadm
@@ -479,23 +444,19 @@ create_lsadm_freebsd()
 create_lsadm()
 {
     groupadd lsadm
-    #1>/dev/null 2>&1
     lsadm_gid=`grep "^lsadm:" /etc/group | awk -F : '{ print $3; }'`
     useradd -g $lsadm_gid -d / -r -s /sbin/nologin lsadm
     usermod -a -G $WS_GROUP lsadm
-    #1>/dev/null 2>&1
 
 }
 
 create_lsadm_solaris()
 {
     groupadd lsadm
-    #1>/dev/null 2>&1
     lsadm_gid=`grep "^lsadm:" /etc/group | awk -F: '{ print $3; }'`
     useradd -g $lsadm_gid -d / -s /bin/false lsadm
     usermod -G $WS_GROUP lsadm
 
-    #1>/dev/null 2>&1
 
 }
 
@@ -679,16 +640,6 @@ installation()
     util_cpfile "$SDIR_OWN" $EXEC_MOD bin/wswatch.sh
     util_cpfilev "$SDIR_OWN" $EXEC_MOD $VERSION bin/lswsctrl bin/lshttpd bin/lscgid
 
-    #if [ -e "$LSINSTALL_DIR/bin/lshttpd.dbg" ]; then
-    #    if [ -f "$LSINSTALL_DIR/bin/lshttpd.dbg.$VERSION" ]; then
-    #        rm "$LSINSTALL_DIR/bin/lshttpd.dbg.$VERSION"
-    #    fi
-    #    util_cpfilev "$SDIR_OWN" $EXEC_MOD $VERSION bin/lshttpd.dbg
-    #
-    #    #enable debug build for beta release
-    #    ln -sf ./lshttpd.dbg.$VERSION $LSWS_HOME/bin/lshttpd
-    #fi
-
     ln -sf ./lshttpd.$VERSION $LSWS_HOME/bin/lshttpd
     ln -sf lshttpd $LSWS_HOME/bin/litespeed
 
@@ -719,57 +670,6 @@ installation()
         $LSWS_HOME/admin/misc/rc-inst.sh
     fi
 }
-
-
-setupPHPAccelerator()
-{
-    cat <<EOF
-
-PHP Opcode Cache Setup
-
-In order to maximize the performance of PHP, a pre-built PHP opcode cache
-can be installed automatically. The opcode cache increases performance of
-PHP scripts by caching them in compiled state, the overhead of compiling
-PHP is avoided.
-
-Note: If an opcode cache has been installed already, you do not need to
-      change it. If you need to built PHP binary by yourself, you need to
-      built PHP opcode cache from source as well, unless the version of your
-      PHP binary is same as that the pre-built PHP opcode cache built for.
-
-EOF
-
-    printf "%s" "Would you like to change PHP opcode cache setting [y/N]? "
-
-    read PHPACC
-    echo
-
-    if [ "x$PHPACC" = "x" ]; then
-        PHPACC=n
-    fi
-    if [ `expr "$PHPACC" : '[Yy]'` -gt 0 ]; then
-        $LSWS_HOME/admin/misc/enable_phpa.sh
-    fi
-}
-
-
-installAWStats()
-{
-
-#AWStats Integration
-
-#AWStats is a popular log analyzer that generates advanced web server
-#statistics. LiteSpeed web server seamlessly integrates AWStats into
-#its Web Admin Interface. AWStats configuration and statistics update
-#have been taken care of by LiteSpeed web server.#
-
-#Note: If AWStats has been installed already, you do not need to
-#      install again unless a new version of AWStats is available.
-
-        PHPACC=n
-#        $LSWS_HOME/admin/misc/awstats_install.sh
-}
-
 
 finish()
 {

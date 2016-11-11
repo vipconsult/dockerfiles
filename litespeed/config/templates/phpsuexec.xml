@@ -65,15 +65,17 @@
         <persistConn>1</persistConn>
         <pcKeepAliveTimeout>30</pcKeepAliveTimeout>
         <respBuffer>0</respBuffer>
+        <env>PHP_LSAPI_CHILDREN=5</env>
+        <env>PHP_INI_SCAN_DIR=$VH_ROOT/public_html</env>
         <autoStart>1</autoStart>
         <path>$SERVER_ROOT/fcgi-bin/lsphp5</path>
         <backlog>10</backlog>
-        <instances>5</instances>
+        <instances>1</instances>
         <runOnStartUp>0</runOnStartUp>
         <extMaxIdleTime>60</extMaxIdleTime>
         <priority>0</priority>
-        <memSoftLimit>500M</memSoftLimit>
-        <memHardLimit>550M</memHardLimit>
+        <memSoftLimit>1500M</memSoftLimit>
+        <memHardLimit>1550M</memHardLimit>
         <procSoftLimit>100</procSoftLimit>
         <procHardLimit>200</procHardLimit>
       </extProcessor>
