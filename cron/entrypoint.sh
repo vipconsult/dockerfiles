@@ -6,10 +6,10 @@ cronFile=/etc/crontab
 echo "SHELL=/bin/sh" >$cronFile
 echo "PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin" >>$cronFile
 
-if [ -n "${CRON_EMAIL}" ]; then
-    echo "MAILTO=$CRON_EMAIL" >> $cronFile
-fi
+# add all env vars to the cron runner
+printenv >> $cronFile
 
+# CRONTASK_ vars use a special format so need to be processed separately
 for item in `env`
 do
    case "$item" in
