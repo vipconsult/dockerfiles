@@ -11,7 +11,7 @@ we use supervisor as the cron requires rsyslog so we need to run rsyslog prior t
 you can check the  cron logs using the standard method : docker logs cronContainer
 
 # MANUAL RUN
-docker run -d -e DOCKER_API_VERSION=1.23 -e MAILTO=email@domain.com -e CRONTASK_1="0 1 * * *  root docker exec someRunningContainer php /home/http/cron.php" vipconsult/cron
+	docker run -d -e DOCKER_API_VERSION=1.23 -e MAILTO=email@domain.com -e CRONTASK_1="0 1 * * *  root docker exec someRunningContainer php /home/http/cron.php" vipconsult/cron
 
 
 # COMPOSE FILE
