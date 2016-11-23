@@ -17,8 +17,8 @@ we use supervisor as the cron requires rsyslog so we need to run rsyslog prior t
 # MANUAL RUN
 	docker run -d \
 		--name=cronContainer \
-		-e DOCKER_API_VERSION=1.23 \ 
-		-e SMTP_SERVER=smtpContainer \ 
+		-e DOCKER_API_VERSION=1.23 \
+		-e SMTP_SERVER=smtpContainer \
 		-e MAILTO=email@domain.com \
 		-e CRONTASK_1="* * * * *  root docker exec phpContainer php /home/cron.php" \
 		vipconsult/cron
