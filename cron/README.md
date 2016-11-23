@@ -15,8 +15,11 @@ we use supervisor as the cron requires rsyslog so we need to run rsyslog prior t
 
 
 # MANUAL RUN (copy and paster)
-	the default bridge network doesn't allow communication between containers without using the legacy --link switch so we creat a user defined network
+	the default bridge network doesn't allow communication between containers without using 
+	the legacy --link switch so we creat a user defined network
+	
 	docker network create cronApp
+	
 	docker run -d \
 		--name=smtpContainer \
 		--net cronApp \
