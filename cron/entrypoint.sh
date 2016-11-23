@@ -21,7 +21,7 @@ do
 done
 
 smtpFile=/etc/ssmtp/revaliases
-echo "root:cron-$HOSTNAME.$DOMAINNAME@$DOMAINNAME:$SMTP_SERVER" >> $smtpFile
+echo "root:cron_$HOSTNAME@$DOMAINNAME:$SMTP_SERVER" >> $smtpFile
 
 # avoid race condition when crontab is trying to read the crontab file , but the file is still not closed
 sleep 1 
