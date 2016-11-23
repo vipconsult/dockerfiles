@@ -15,6 +15,8 @@ we use supervisor as the cron requires rsyslog so we need to run rsyslog prior t
 
 
 # MANUAL RUN (copy and paster)
+	the default bridge network doesn't allow communication between containers without using the legacy --link switch so we creat a user defined network
+	docker network create cronApp
 	docker run -d \
 		--name=smtpContainer \
 		--hostname=domain.com \
@@ -27,11 +29,12 @@ we use supervisor as the cron requires rsyslog so we need to run rsyslog prior t
 		vipconsult/smtp
 	docker run -d \
 		--name=cronContainer \
-		--link=smtpContainer \
+		# the hostname is used for the email FROM field then cron send the email \
+		--hostname=www.domain.com \
 		-e DOCKER_API_VERSION=1.23 \
 		-e SMTP_SERVER=smtpContainer \
 		-e MAILTO=email@domain.com \
-		-e CRONTASK_1="* * * * *  root docker exec phpContainer php /home/cron.php" \
+		-e CRONTASK_1="* * * * *  root docker run debian echo 'Cron run'" \
 		vipconsult/cron
 
 # COMPOSE FILE
