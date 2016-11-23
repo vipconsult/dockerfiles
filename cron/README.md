@@ -19,7 +19,7 @@ we use supervisor as the cron requires rsyslog so we need to run rsyslog prior t
 	docker network create cronApp
 	docker run -d \
 		--name=smtpContainer \
-		--net cronApp
+		--net cronApp \
 		--hostname=domain.com \
 		-e DOMAINNAME=domain.com \
 		-e SMTP_INTERVAL=1m \
@@ -32,7 +32,7 @@ we use supervisor as the cron requires rsyslog so we need to run rsyslog prior t
 	- the hostname is used for the email FROM field then cron send the email \
 	docker run -d \
 		--name=cronContainer \
-		--net cronApp
+		--net cronApp \
 		--hostname=www.domain.com \
 		-e DOCKER_API_VERSION=1.23 \
 		-e SMTP_SERVER=smtpContainer \
