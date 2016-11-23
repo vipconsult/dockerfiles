@@ -35,12 +35,13 @@ we use supervisor as the cron requires rsyslog so we need to run rsyslog prior t
 	docker run -d \
 		--name=cronContainer \
 		--net cronApp \
+		-v /var/run/docker.sock:/var/run/docker.sock:ro \
 		-e DOMAINNAME=domain.com \
 		-e DOCKER_API_VERSION=1.23 \
 		-e SMTP_SERVER=smtpContainer \
 		-e MAILTO=email@domain.com \
-		-e CRONTASK_1="* * * * *  root docker run debian echo 'Cron 1 run from docker container'>>/var/log/syslog" \
-		-e CRONTASK_2="* * * * *  root docker run debian echo 'Cron 2 run from docker container'>>/var/log/syslog" \
+		-e CRONTASK_1="* * * * *  root docker run debian echo 'Cron 1 run from docker container'" \
+		-e CRONTASK_2="* * * * *  root docker run debian echo 'Cron 2 run from docker container'" \
 		vipconsult/cron
 
 # COMPOSE FILE
