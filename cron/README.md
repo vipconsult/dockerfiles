@@ -14,14 +14,7 @@ we use supervisor as the cron requires rsyslog so we need to run rsyslog prior t
 
 
 
-# MANUAL RUN
-	docker run -d \
-		--name=cronContainer \
-		-e DOCKER_API_VERSION=1.23 \
-		-e SMTP_SERVER=smtpContainer \
-		-e MAILTO=email@domain.com \
-		-e CRONTASK_1="* * * * *  root docker exec phpContainer php /home/cron.php" \
-		vipconsult/cron
+# MANUAL RUN (copy and paster)
 	docker run -d \
 		--name=smtpContainer \
 		--hostname=domain.com \
@@ -32,10 +25,16 @@ we use supervisor as the cron requires rsyslog so we need to run rsyslog prior t
 		-e SMTP_queue_run_max=3 \
 		-e SMTP_timeout_frozen_after=3h \
 		vipconsult/smtp
+	docker run -d \
+		--name=cronContainer \
+		--link=smtpContainer \
+		-e DOCKER_API_VERSION=1.23 \
+		-e SMTP_SERVER=smtpContainer \
+		-e MAILTO=email@domain.com \
+		-e CRONTASK_1="* * * * *  root docker exec phpContainer php /home/cron.php" \
+		vipconsult/cron
 
 # COMPOSE FILE
-
-
 	cron:
         	image: vipconsult/cron
         	volumes:  
