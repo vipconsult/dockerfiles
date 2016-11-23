@@ -27,9 +27,10 @@ we use supervisor as the cron requires rsyslog so we need to run rsyslog prior t
 		-e SMTP_queue_run_max=3 \
 		-e SMTP_timeout_frozen_after=3h \
 		vipconsult/smtp
+
+	- the hostname is used for the email FROM field then cron send the email \
 	docker run -d \
 		--name=cronContainer \
-		# the hostname is used for the email FROM field then cron send the email \
 		--hostname=www.domain.com \
 		-e DOCKER_API_VERSION=1.23 \
 		-e SMTP_SERVER=smtpContainer \
