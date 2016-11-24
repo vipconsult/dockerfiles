@@ -62,7 +62,7 @@ we use supervisor as the cron requires rsyslog so we need to run rsyslog prior t
 		    - CRONTASK_2=* * * * *  root docker run debian echo 'Cron 2 run from docker container'
 
 	    smtp:
-		image: vipconsult/smtp
+	    	image: vipconsult/smtp
 		container_name: smtpContainer
 		environment:
 		    - DOMAINNAME=domain.com
