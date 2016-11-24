@@ -16,7 +16,7 @@ we use supervisor as the cron requires rsyslog so we need to run rsyslog prior t
 
 # CRON EMAILS
 	if you don't need emails for the output from the cron jobs than you don't need the smtpContainer and the MAILTO env
-	# DOMAINNAME  is used for the email  FROM and TO  fields when  then cron sends the email
+	# DOMAINNAME  is used for the email  FROM and TO  fields when cron sends the email
 
 # MANUAL RUN (copy and paster)
 	the default bridge network doesn't allow communication between containers without using 
