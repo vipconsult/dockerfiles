@@ -49,28 +49,28 @@ we use supervisor as the cron requires rsyslog so we need to run rsyslog prior t
 	version: '2'
 	services:
 	    cron:
-		image: vipconsult/cron
-		container_name: cronContainer
-		volumes:
-		    - /var/run/docker.sock:/var/run/docker.sock:ro
-		environment:
-		    - DOCKER_API_VERSION=1.23
-		    - SMTP_SERVER=smtpContainer
-		    - DOMAINNAME=domain.com
-		    - MAILTO=email@domain.com
-		    - CRONTASK_1=* * * * *  root docker run debian echo 'Cron 1 run from docker container'
-		    - CRONTASK_2=* * * * *  root docker run debian echo 'Cron 2 run from docker container'
+			image: vipconsult/cron
+			container_name: cronContainer
+			volumes:
+			    - /var/run/docker.sock:/var/run/docker.sock:ro
+			environment:
+			    - DOCKER_API_VERSION=1.23
+			    - SMTP_SERVER=smtpContainer
+			    - DOMAINNAME=domain.com
+			    - MAILTO=email@domain.com
+			    - CRONTASK_1=* * * * *  root docker run debian echo 'Cron 1 run from docker container'
+			    - CRONTASK_2=* * * * *  root docker run debian echo 'Cron 2 run from docker container'
 
 	    smtp:
-	    	image: vipconsult/smtp
-		container_name: smtpContainer
-		environment:
-		    - DOMAINNAME=domain.com
-		    - SMTP_INTERVAL=1m
-		    - SMTP_PROCESSING=queue_only_load_latch
-		    - SMTP_remote_max_parallel=2
-		    - SMTP_queue_run_max=3
-		    - SMTP_timeout_frozen_after=3h
+			image: vipconsult/smtp
+			container_name: smtpContainer
+			environment:
+			    - DOMAINNAME=domain.com
+			    - SMTP_INTERVAL=1m
+			    - SMTP_PROCESSING=queue_only_load_latch
+			    - SMTP_remote_max_parallel=2
+			    - SMTP_queue_run_max=3
+			    - SMTP_timeout_frozen_after=3h
 		
 
 # LOGS
