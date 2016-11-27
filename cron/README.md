@@ -17,6 +17,10 @@ we use supervisor as the cron requires rsyslog so we need to run rsyslog prior t
 # CRON EMAILS
 	if you don't need emails for the output from the cron jobs than you don't need the smtpContainer and the MAILTO env
 	# DOMAINNAME  is used for the email  FROM and TO  fields when cron sends the email
+# ENV vars
+	all envarionment variables set with the -e or in docker compose will also be set in the crontab file. This solve some weird command failures when we don't have the correct env vars. If you need to set some env vars in the container used to run the cron command you can use something like:
+	CRONTASK_1="* * * * *  root docker run debian bash -c "export CUSTOM_ENV=cron && echo '$CUSTOM_ENV 1 run from docker container'"
+	
 
 # MANUAL RUN (copy and paster)
 	the default bridge network doesn't allow communication between containers without using 
