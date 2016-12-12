@@ -146,7 +146,7 @@ perform_backups "-daily"
 
 if  [ $DELETE = "y" ]; then
 	find $BACKDIR/*/ -type f -mtime +$DAYS -delete;
-        find $BACKDIR -type d -empty -exec rmdir {} \;
+        find $BACKDIR -type d -empty -delete;
 fi
 
 echo "Backups older than $DAYS days have been deleted."
