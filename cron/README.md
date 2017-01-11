@@ -1,4 +1,6 @@
 # OVERVIEW
+[![Run cron in a docker environment](https://img.youtube.com/vi/uMPuWE3m9VM/0.jpg)](https://youtu.be/uMPuWE3m9VM "Run cron in a docker environment")
+
 
 
 We don't mount the docker executable , but only the docker.sock file.
@@ -14,7 +16,11 @@ we use supervisor as the cron requires rsyslog so we need to run rsyslog prior t
 
 # CRON EMAILS
 	if you don't need emails for the output from the cron jobs than you don't need the smtpContainer and the MAILTO env
-	# DOMAINNAME  is used for the email  FROM and TO  fields when  then cron sends the email
+	# DOMAINNAME  is used for the email  FROM and TO  fields when cron sends the email
+# ENV vars
+	all envarionment variables set with the -e or in docker compose will also be set in the crontab file. This solve some weird command failures when we don't have the correct env vars. If you need to set some env vars in the container used to run the cron command you can use something like:
+	CRONTASK_1="* * * * *  root docker run debian bash -c "export CUSTOM_ENV=cron && echo '$CUSTOM_ENV 1 run from docker container'"
+	
 
 # MANUAL RUN (copy and paster)
 	the default bridge network doesn't allow communication between containers without using 
@@ -49,28 +55,28 @@ we use supervisor as the cron requires rsyslog so we need to run rsyslog prior t
 	version: '2'
 	services:
 	    cron:
-		image: vipconsult/cron
-		container_name: cronContainer
-		volumes:
-		    - /var/run/docker.sock:/var/run/docker.sock:ro
-		environment:
-		    - DOCKER_API_VERSION=1.23
-		    - SMTP_SERVER=smtpContainer
-		    - DOMAINNAME=domain.com
-		    - MAILTO=email@domain.com
-		    - CRONTASK_1=* * * * *  root docker run debian echo 'Cron 1 run from docker container'
-		    - CRONTASK_2=* * * * *  root docker run debian echo 'Cron 2 run from docker container'
+			image: vipconsult/cron
+			container_name: cronContainer
+			volumes:
+			    - /var/run/docker.sock:/var/run/docker.sock:ro
+			environment:
+			    - DOCKER_API_VERSION=1.23
+			    - SMTP_SERVER=smtpContainer
+			    - DOMAINNAME=domain.com
+			    - MAILTO=email@domain.com
+			    - CRONTASK_1=* * * * *  root docker run debian echo 'Cron 1 run from docker container'
+			    - CRONTASK_2=* * * * *  root docker run debian echo 'Cron 2 run from docker container'
 
 	    smtp:
-		image: vipconsult/smtp
-		container_name: smtpContainer
-		environment:
-		    - DOMAINNAME=domain.com
-		    - SMTP_INTERVAL=1m
-		    - SMTP_PROCESSING=queue_only_load_latch
-		    - SMTP_remote_max_parallel=2
-		    - SMTP_queue_run_max=3
-		    - SMTP_timeout_frozen_after=3h
+			image: vipconsult/smtp
+			container_name: smtpContainer
+			environment:
+			    - DOMAINNAME=domain.com
+			    - SMTP_INTERVAL=1m
+			    - SMTP_PROCESSING=queue_only_load_latch
+			    - SMTP_remote_max_parallel=2
+			    - SMTP_queue_run_max=3
+			    - SMTP_timeout_frozen_after=3h
 		
 
 # LOGS
