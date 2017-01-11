@@ -11,7 +11,7 @@ if [ !"$(ls -A /usr/sbin/r1soft/conf)" ]; then
 fi
 
 
-sed -i -e "s/^.*daemonize=.*$/daemonize=false/" /usr/sbin/r1soft/conf/server.conf
+# sed -i -e "s/^.*daemonize=.*$/daemonize=false/" /usr/sbin/r1soft/conf/server.conf
 
 if [ -n "${CDP_pass}" ]; then
     /usr/bin/serverbackup-setup --user $CDP_user --pass $CDP_pass > /dev/null
@@ -31,5 +31,7 @@ ulimit -v unlimited # virtual memory
 umask 077
 
 export LD_LIBRARY_PATH=${LIB_PATH}
-
+truncate -s0 /usr/sbin/r1soft/log/server.log
+/opt/r1soft/docstore/bin/docstore -port 446 -keepHistory 1 >> /usr/sbin/r1soft/log/server.log &
+/usr/sbin/r1soft/bin/cdpserver /usr/sbin/r1soft/conf/server.conf
 exec "$@"
