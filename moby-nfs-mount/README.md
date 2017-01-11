@@ -5,10 +5,10 @@ A Simple Docker image to automate mounting a remote NFS share into the Docker ho
 docker run -d \
     --privileged --pid=host \
     --restart=unless-stopped \
-    -e SERVER=NFS_SERVER:/  \
+    -e SERVER=NFS_SERVER  \
     -e MOUNT=/host/mount/folder vipconsult/moby-nfs-mount
 ```
-- SERVER : the remote NFS server 
+- SERVER : the remote NFS server (it is set for nfs4)
 - MOUNT : local host folder used for the mounting
 
 and then to use it inside a container
