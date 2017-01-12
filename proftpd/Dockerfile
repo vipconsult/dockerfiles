@@ -11,6 +11,8 @@ RUN apt-get install openssl \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-ADD proftpd.conf /etc/proftpd/
+COPY proftpd.conf /etc/proftpd/
+COPY entrypoint.sh /
 
-CMD proftpd -n
+ENTRYPOINT ["/entrypoint.sh"]
+CMD ["proftpd", "-n"]
