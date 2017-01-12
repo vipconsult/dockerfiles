@@ -1,0 +1,3 @@
+[submodule "percona-xtradb-cluster-docker"]
+	path = percona-xtradb-cluster-docker
+	url = https://github.com/vipconsult/percona-xtradb-cluster-docker.git
