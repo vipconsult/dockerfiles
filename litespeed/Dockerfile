@@ -1,5 +1,4 @@
-FROM debian:latest
-
+FROM vipconsult/base:jessie
 MAINTAINER Stan Velikov "stan@vip-consult.solutions"
 
 ENV TERM linux
@@ -14,8 +13,8 @@ RUN echo 'APT::NeverAutoRemove "0";' >> /etc/apt/apt.conf.d/01usersetting && \
     echo 'APT::Get::Assume-Yes "true";' >> /etc/apt/apt.conf.d/01usersetting && \
     echo 'APT::Get::force-yes "true";' >> /etc/apt/apt.conf.d/01usersetting  
 
-RUN apt-get update && apt-get -y upgrade && apt-get install wget openssl nano
-RUN apt-get install build-essential  lib32z1 # lib32ncurses5	#required libs for litespeed instalations
+RUN apt-get update #&& apt-get -y upgrade && apt-get install wget openssl nano
+RUN apt-get install build-essential  lib32z1 #required libs for litespeed instalations
 
 
 RUN mkdir -p /var/log/litespeed

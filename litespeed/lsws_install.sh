@@ -1,6 +1,4 @@
 #!/bin/sh
-
-
 show_help()
 {
     cat <<EOF
@@ -151,56 +149,21 @@ download_lsws()
     PF=`uname -p`
     OS=`uname -s`
 
-    echo "... Detecting platform ..."
-
-    if [ "x$OS" = "xFreeBSD" ] ; then
-        if [ "x$PF" = "xi386" ]; then
-            PLATFORM="-i386-freebsd6"
-        elif [ "x$PF" = "xamd64" ]; then
-            PLATFORM="-x86_64-freebsd6"
-        else
-            check_errs 1 "unkown platform '$PL' for FreeBSD."
-        fi
-    elif [ "x$OS" = "xSunOS" ]; then
-        if [ "x$PF" = "xi386" ]; then
-            BITS=`isainfo -b`
-            if [ "x$BITS" = "x64" ]; then
-                PLATFORM="-x86_64-solaris"
-            else
-                PLATFORM="-i386-solaris"
-            fi
-        else
-            check_errs 1 "unkown platform '$PL' for Sun Solaris."
-        fi
-    elif [ "x$OS" = "xLinux" ]; then
-        PF=`uname -m`
-        if [ "x$PF" = "xi686" ] || [ "x$PF" = "xi586" ] || [ "x$PF" = "xi486" ] || [ "x$PF" = "xi386" ]; then
-            PLATFORM="-i386-linux"
-        elif [ "x$PF" = "xx86_64" ]; then
-            PLATFORM="-x86_64-linux"
-        else
-            check_errs 1 "unkown platform '$PL' for Linux."
-        fi
-    fi
-
-    echo "Platform is $PLATFORM"
-    echo ""
-
     echo "... Query latest release version ..."
 
     DOWNLOAD_URL="http://update.litespeedtech.com/ws/latest.php"
 
     REL_VERSION=`wget -q --output-document=- $DOWNLOAD_URL`
 
-#    REL_VERSION=`expr "$REL_VERSION" : '.*LSWS=\([0-9\.]*\)'`
-REL_VERSION=5.0.19
+    REL_VERSION=`expr "$REL_VERSION" : '.*LSWS=\([0-9\.]*\)'`
+#    REL_VERSION=5.0.19
     echo "Lastest version is $REL_VERSION"
     echo ""
 
     MAJOR_VERSION=`expr $REL_VERSION : '\([0-9]*\)\..*'`
     LOCAL_DIR="lsws-$REL_VERSION"
 
-#    DOWNLOAD_URL="http://www.litespeedtech.com/packages/$MAJOR_VERSION.0/lsws-$REL_VERSION-ent$PLATFORM.tar.gz"
+#    DOWNLOAD_URL="http://www.litespeedtech.com/packages/$MAJOR_VERSION.0/lsws-$REL_VERSION-ent-x86_64-linux.tar.gz"
      DOWNLOAD_URL="http://www.litespeedtech.com/packages/$MAJOR_VERSION.0/lsws-$REL_VERSION-std-i386-linux.tar.gz"
     if [ ! -d "$WGET_TEMP" ] ; then
         mkdir -v -p "$WGET_TEMP"
@@ -245,7 +208,6 @@ test_license()
             echo "Serial number is available."
             echo "Contacting licensing server ..."
 
-            echo ""
             $LSINSTALL_DIR/bin/lshttpd -r
 
             if [ $? -eq 0 ]; then
