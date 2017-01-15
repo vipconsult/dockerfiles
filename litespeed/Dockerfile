@@ -1,5 +1,5 @@
 FROM vipconsult/base:jessie
-MAINTAINER Stan Velikov "stan@vip-consult.solutions"
+MAINTAINER Vip Consult Solutions <team@vip-consult.solutions>
 
 ENV TERM linux
 ENV DEBIAN_FRONTEND noninteractive 

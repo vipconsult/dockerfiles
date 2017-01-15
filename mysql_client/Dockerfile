@@ -1,5 +1,5 @@
 FROM vipconsult/base:jessie
-MAINTAINER Krasimir Georgiev (support@vip-consult.co.uk)
+MAINTAINER Vip Consult Solutions <team@vip-consult.solutions>
 
 RUN apt-get install locales mysql-client-5.5
 

@@ -1,5 +1,5 @@
 FROM debian:squeeze
-MAINTAINER Krasimir Georgiev <support@vip-consult.co.uk>
+MAINTAINER Vip Consult Solutions <team@vip-consult.solutions>
 
 ENV TERM xterm
 ENV DEBIAN_FRONTEND noninteractive 

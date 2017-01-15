@@ -1,5 +1,5 @@
 FROM vipconsult/base:jessie
-MAINTAINER Krasimir Georgiev (support@vip-consult.co.uk)
+MAINTAINER Vip Consult Solutions <team@vip-consult.solutions>
 
 # Set the locale
 RUN echo deb http://apt.postgresql.org/pub/repos/apt/ jessie-pgdg main >> /etc/apt/sources.list && \

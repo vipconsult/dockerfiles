@@ -1,6 +1,6 @@
 FROM php:5.6.27-cli
 
-MAINTAINER Stan Velikov "stan@vip-consult.solutions"
+MAINTAINER Vip Consult Solutions <team@vip-consult.solutions>
 
 ENV OpenLiteSpeed 1.4.17-2 ~ trusty
 ENV TERM linux

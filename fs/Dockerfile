@@ -1,5 +1,5 @@
 FROM vipconsult/base:jessie
-MAINTAINER Krasimir Georgiev <support@vip-consult.co.uk>
+MAINTAINER Vip Consult Solutions <team@vip-consult.solutions>
 
 RUN apt-get install -y curl ca-certificates
 RUN curl https://files.freeswitch.org/repo/deb/debian/freeswitch_archive_g0.pub | apt-key add - 

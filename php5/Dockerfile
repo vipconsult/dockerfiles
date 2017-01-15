@@ -1,5 +1,5 @@
 FROM php:5.6-fpm
-MAINTAINER Krasimir Georgiev <support@vip-consult.co.uk>
+MAINTAINER Vip Consult Solutions <team@vip-consult.solutions>
 
 # Install modules
 RUN echo 'APT::NeverAutoRemove "0";' >> /etc/apt/apt.conf.d/01usersetting && \

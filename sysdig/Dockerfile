@@ -1,7 +1,6 @@
-
 FROM debian:latest
 
-MAINTAINER Stan Velikov "stan@vip-consult.solutions"
+MAINTAINER Vip Consult Solutions <team@vip-consult.solutions>
 
 ENV DEBIAN_FRONTEND noninteractive
 ENV APT_LISTCHANGES_FRONTEND noninteractive

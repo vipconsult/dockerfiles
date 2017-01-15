@@ -1,5 +1,5 @@
 FROM debian:jessie
-MAINTAINER stanimirvelikov
+MAINTAINER Vip Consult Solutions <team@vip-consult.solutions>
 ENV DEBIAN_FRONTEND noninteractive 
 ENV APT_LISTCHANGES_FRONTEND noninteractive
 
