@@ -1,3 +1,3 @@
-[submodule "percona-docker"]
-	path = percona-docker
+[submodule "percona"]
+	path = percona
 	url = https://github.com/vipconsult/percona-docker.git
