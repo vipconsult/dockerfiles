@@ -5,7 +5,7 @@ A Simple Docker image to automate mounting a remote NFS share into the Docker ho
 docker run -d \
     --privileged --pid=host \
     --restart=unless-stopped \
-    -e SERVER=NFS_SERVER  \
+    -e SERVER=$NFS_SERVER:/  \
     -e MOUNT=/host/mount/folder vipconsult/moby-nfs-mount
 ```
 - SERVER : the remote NFS server (it is set for nfs4)
@@ -19,6 +19,16 @@ It support all Docker platforms that use the Moby Linux.<br>
   - Docker for Mac<br>
   - Docker for AWS<br/>
   - Docker for Windows (unsure)<br/>
+
+### To mount it on all swarm nodes run using :<br/>
+```
+swarm-exec \
+    docker run -d \
+    --privileged --pid=host \
+    --restart=unless-stopped \
+    -e SERVER=$NFS_SERVER:/  \
+    -e MOUNT=/home/nfsMount vipconsult/moby-nfs-mount 
+```
 
 ### Here is how it works:<br/>
   nsenter to access the host namespace<br>
