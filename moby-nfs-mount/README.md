@@ -28,7 +28,7 @@ swarm-exec \
     --privileged --pid=host \
     --restart=unless-stopped \
     -e SERVER=$NFS_SERVER:/  \
-    -e MOUNT=/home/nfsMount vipconsult/moby-nfs-mount 
+    -e MOUNT=/host/mount/folder vipconsult/moby-nfs-mount 
 ```
 https://github.com/mavenugo/swarm-exec
 
