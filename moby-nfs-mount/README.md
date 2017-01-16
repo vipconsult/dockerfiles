@@ -42,7 +42,7 @@ to use it in a service
   nsenter to access the host namespace<br>
   install the nfs client on the host<br>
   mount the NFS on the hostusing the -e MOUNT env from the run command<br>
-  run inotifywait to output logs for the folder changes
+  inotifywait to output logs for any folder changes
   
 ### NOTES: 
   the nfs server should support nfs4
