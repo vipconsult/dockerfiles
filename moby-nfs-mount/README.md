@@ -19,6 +19,7 @@ It support all Docker platforms that use the Moby Linux.<br>
   - Docker for Mac<br>
   - Docker for AWS<br/>
   - Docker for Windows (unsure)<br/>
+  - Should work on any Alpine docker host
 
 ### To mount it on all swarm nodes run using :<br/>
 docker service create doesn't support --privileged so we need to run it using swarm-exec which runs a single command on every node cluster including every new node that joins
@@ -32,10 +33,17 @@ swarm-exec \
 ```
 https://github.com/mavenugo/swarm-exec
 
+to use it in a service 
+```
+--mount type=bind,src=/host/mount/folder,dst=/container/folder
+```
+
 ### Here is how it works:<br/>
   nsenter to access the host namespace<br>
   install the nfs client on the host<br>
   mount the NFS on the hostusing the -e MOUNT env from the run command<br>
-
+  run inotifywait to output logs for the folder changes
+  
 ### NOTES: 
+  the nfs server should support nfs4
   this technique will be replaced by distributed docker volumes plugins and automated docker plugin installation
