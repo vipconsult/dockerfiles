@@ -30,27 +30,12 @@ swarm-exec \
     -e SERVER=$NFS_SERVER:/  \
     -e MOUNT=/home/nfsMount vipconsult/moby-nfs-mount 
 ```
+https://github.com/mavenugo/swarm-exec
 
 ### Here is how it works:<br/>
   nsenter to access the host namespace<br>
   install the nfs client on the host<br>
   mount the NFS on the hostusing the -e MOUNT env from the run command<br>
 
-### This technique can be used in a swarm for persistant storage.
-docker service create doesn't support --privileged and  --pid=host so we can use
-```
-swarm-exec \
-    docker run -d \
-    --privileged --pid=host \
-    --restart=unless-stopped \
-    -e SERVER=NFS_SERVER:/  \
-    -e MOUNT=/host/mount/folder vipconsult/moby-nfs-mount 
-```
-
-https://github.com/mavenugo/swarm-exec
-
 ### NOTES: 
-  this technique will be replaced by distributed docker  volumes plugins and automated docker plugin installation
-
-### TO DO :Demo video
-
+  this technique will be replaced by distributed docker volumes plugins and automated docker plugin installation
