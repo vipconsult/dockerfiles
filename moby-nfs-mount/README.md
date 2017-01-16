@@ -21,7 +21,7 @@ It support all Docker platforms that use the Moby Linux.<br>
   - Docker for Windows (unsure)<br/>
 
 ### To mount it on all swarm nodes run using :<br/>
-docker service create doesn't support --privileged so we need to run it using swarm-exec which runs a sinle command on every node cluster including every new node that joins
+docker service create doesn't support --privileged so we need to run it using swarm-exec which runs a single command on every node cluster including every new node that joins
 ```
 swarm-exec \
     docker run -d \
