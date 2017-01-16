@@ -19,4 +19,10 @@ fi
 # install required packages and mount the NFS share using env vars $SERVER and  $MOUNT
 # create the $MOUNT dir if it doesn't exist
 # and finally run inotifywait which will output all file folder and file operations so we have some basic logging
-nsenter -t 1 -m -u -i -n sh -c "apk update && apk add nfs-utils inotify-tools && mkdir -p $MOUNT && mount -t nfs4 -o nfsvers=4.1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2 $SERVER $MOUNT && inotifywait -m $MOUNT"
+nsenter -t 1 -m -u -i -n sh -c " \
+    apk update && \
+    apk add nfs-utils inotify-tools && \
+    mkdir -p $MOUNT && \
+    mount -t nfs4 -o nfsvers=4.1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2 $SERVER $MOUNT && \
+    inotifywait -m $MOUNT \
+    "
