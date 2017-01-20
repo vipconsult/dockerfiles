@@ -2,9 +2,9 @@ FROM vipconsult/base:jessie
 MAINTAINER Vip Consult Solutions <team@vip-consult.solutions>
 
 # Version
-ENV NGINX_VERSION 1.11.3
-ENV NPS_VERSION 1.11.33.3
-ENV OPENSSL_VERSION 1.0.2h
+ENV NGINX_VERSION 1.11.8
+ENV NPS_VERSION 1.11.33.4
+ENV OPENSSL_VERSION 1.1.0c
 # Install Build Tools & Dependence
 
 RUN apt-get install autotools-dev zlib1g-dev libpcre3 libpcre3-dev && \
