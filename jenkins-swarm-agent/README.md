@@ -1,4 +1,4 @@
-an image to automate deploying a jenkins swarm agent using docker
+## an image to automate deploying a jenkins swarm agent using docker
 
 https://wiki.jenkins-ci.org/display/JENKINS/Swarm+Plugin
 
