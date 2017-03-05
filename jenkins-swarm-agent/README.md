@@ -1,4 +1,4 @@
-## an image to automate deploying a jenkins swarm agent using docker
+**[vipconsult/jenkins-swarm-agent](https://hub.docker.com/r/vipconsult/jenkins-swarm-agent)**  is simple image that runs the jenkins swarm plugin jar file which connects to a given master using parameters from  the Docker secret 
 
 https://wiki.jenkins-ci.org/display/JENKINS/Swarm+Plugin
 
@@ -8,7 +8,7 @@ the only requirement is that the host has a docker daemon running and you set th
 * **10.0.0.101** replace it with actual Jenkins master IP
 * *jenkins-v1 instead of just jenkins so that we can rotate the passwords - [Docker docs](https://docs.docker.com/engine/swarm/secrets/#example-rotate-a-secret)*
 
-**[vipconsult/jenkins-swarm-agent](https://hub.docker.com/r/vipconsult/jenkins-swarm-agent)**  is simple image that runs the jenkins swatm plugin jar file which connects to a given master using parameters from  the Docker secret 
+
 
 **On the testing docker swarm**
 
