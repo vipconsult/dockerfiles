@@ -1,6 +1,9 @@
 A Simple Docker image to automate mounting a remote NFS share into the Docker host.
 
 ### Usage
+
+[![Usage Example on Amazon AWS](https://img.youtube.com/vi/glZs9SEa-_U/0.jpg)](https://youtu.be/glZs9SEa-_U "The video is a step by step tutorial")
+
 ```
 docker run -d \
     --privileged --pid=host \
