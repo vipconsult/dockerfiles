@@ -4,7 +4,7 @@ MAINTAINER Vip Consult Solutions <team@vip-consult.solutions>
 # Version
 ENV NGINX_VERSION 1.11.8
 ENV NPS_VERSION 1.11.33.4
-ENV OPENSSL_VERSION 1.1.0c
+ENV OPENSSL_VERSION 1.1.0e
 # Install Build Tools & Dependence
 
 RUN apt-get install autotools-dev zlib1g-dev libpcre3 libpcre3-dev && \
