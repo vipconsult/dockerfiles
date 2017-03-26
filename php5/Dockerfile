@@ -52,9 +52,8 @@ RUN echo 'APT::NeverAutoRemove "0";' >> /etc/apt/apt.conf.d/01usersetting && \
         #pdf builded
         sed -i "s/^.*FromLineOverride.*$/FromLineOverride=YES/" /etc/ssmtp/ssmtp.conf && \
         #memcached
-    apt-get install \
-        php-pear curl zlib1g-dev libncurses5-dev libmemcached-dev && \
-        curl -L https://pecl.php.net/get/memcached >> /usr/src/php/ext/memcache.tgz && \
+    apt-get install php-pear curl zlib1g-dev libncurses5-dev libmemcached-dev && \
+        curl -L https://pecl.php.net/get/memcached/2.1.0 >> /usr/src/php/ext/memcache.tgz && \
         tar -xf /usr/src/php/ext/memcache.tgz -C /usr/src/php/ext/ && \
         rm /usr/src/php/ext/memcache.tgz && \
         mv -T /usr/src/php/ext/memcache* /usr/src/php/ext/memcache && \
@@ -66,7 +65,7 @@ RUN echo 'APT::NeverAutoRemove "0";' >> /etc/apt/apt.conf.d/01usersetting && \
 
 
 RUN cp /usr/src/php/php.ini-development /usr/local/etc/php/php.ini && \
-    
+
     # downlod cert chain as without this curl over https returns an error
     wget http://curl.haxx.se/ca/cacert.pem --directory-prefix=/usr/local/etc && \
     wget http://www.symantec.com/content/en/us/enterprise/verisign/roots/Class-3-Public-Primary-Certification-Authority.pem --directory-prefix=/usr/local/etc/ && \
@@ -90,6 +89,3 @@ ADD entrypoint.sh /entrypoint.sh
 RUN chmod o+x /entrypoint.sh  \
     && sed -i -e 's/\r$//' /entrypoint.sh
 CMD ["/entrypoint.sh"]
-
-
-
