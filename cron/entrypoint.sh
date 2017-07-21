@@ -15,7 +15,7 @@ do
    case "$item" in
        CRONTASK_*)
             ENVVAR=`echo $item | cut -d \= -f 1`
-            printenv $ENVVAR >> $cronFile
+            printenv $ENVVAR | sed 's/"\(.*\)"/\1/' >> $cronFile
             ;;
    esac
 done
